@@ -1,0 +1,14 @@
+Страницы:
+<ul class="paginator">
+
+{% if month > 0 %}
+	{% for page in pages.page_range %}
+		<li {% if cur_page.number == page %} class="active" {% endif %} ><a href="{% url video_list_archive_page month=month cur_page=page %}">{{ page }}</a></li>
+	{% endfor %} 
+{% else %}
+	{% for page in pages.page_range %}
+		<li {% if cur_page.number == page %} class="active" {% endif %} ><a href="{% url video_list_page cur_page=page %}">{{ page }}</a></li>
+	{% endfor %} 
+{% endif %}
+
+</ul>

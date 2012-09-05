@@ -1,0 +1,29 @@
+{% extends "base.html" %} 
+{% block content %} 
+
+{% load tags %}
+
+{% paginator month=month cur_page=curpage pages=paginator%}
+
+<ul class="videolist">
+
+{% for video in videos %} 
+<li class="videoitem">
+	<p class="date">{{ video.date|date:"j M Y" }}</p>
+	<a class="videotitle" href="{{video.get_absolute_url}}">{{video.name}}</a>
+	{% showvideo_preview video %}
+	<p>Просмотров: {{video.views}}</p>
+	<a href="{{video.get_absolute_url}}">смотреть...</a>
+	{% if perms.video.can_delete %}
+	<a style="float: right" href="{% url delete_video id=video.pk %}?backurl={{request.path}}">удалить</a>
+	{% endif %}
+
+
+</li>
+{% endfor %} 
+
+</ul>
+
+{% paginator month=month cur_page=curpage pages=paginator%}
+
+{% endblock %} 

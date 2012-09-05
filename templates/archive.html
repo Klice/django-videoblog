@@ -1,0 +1,19 @@
+    {% for video_year in video_list %}
+        <ul class="year">
+            <p class="arch_year">{{video_year.keys.0}}</p>
+            {% for month, videos in video_year.values.0.items %}
+                <!--show only months with videos! -->
+                {% if videos.date %} 
+                    <li id="{{video_year.keys.0}}-{{month}}" class="month">
+                        <div class="month-data">
+                            <div class="collapsed">►&nbsp;</div>
+                            <div class="expanded" style="display:none;">▼&nbsp;</div>
+                            <a href="{% url video_list_archive month=videos.date.month %}" class="name">{{videos.date|date:"F"}}</a>
+                            <span class="counter"> ({{videos.count}})</span>
+                        </div>
+                    </li>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}

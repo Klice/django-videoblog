@@ -1,0 +1,21 @@
+{% extends "base.html" %} 
+
+{% block title %}Писающие девочки | {{ video.name }} {% endblock %}
+{% block keywords %} {{ video.name }} {% endblock %}
+
+
+{% block content %} 
+
+{% load tags %}
+
+
+<h1>{{ video.name }}</h1>
+{% showvideo video %}
+<p>{{video.desc}}</p>	
+{% if perms.video.can_delete %}
+	<br><a href="{% url delete_video id=video.pk %}?backurl={{request.path}}">удалить</a>
+{% endif %}
+
+{% endblock %} 
+
+
