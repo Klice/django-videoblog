@@ -8,6 +8,6 @@ So for adding video to your blog you need just the URL to video page on video ho
  - empflix.com
  - vk.com (for now your need to registrate app on vk.com and modify models.py to set appropriate setting)
 
-In TODO list at first place is to add support for pornhub.com and to repo UserScripts from add video to blog directly from sites.
+In TODO list at first place is to add support for pornhub.com add to repo UserScripts for adding video to blog directly from sites.
  
  
