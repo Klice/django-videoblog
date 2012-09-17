@@ -41,6 +41,10 @@ class Video (models.Model):
 			if self.hoster == 'vk.com':
 				p = re.compile('/video(?P<id>[0-9_]+)$')
 				self.video_id = p.search(url.path).group("id")
+			if self.hoster == 'www.xvideos.com':
+				p = re.compile('/video(?P<id>[0-9_]+)/')
+				self.video_id = p.search(url.path).group("id")
+
 
 		if not self.name:
 			if self.hoster == 'xhamster.com':
@@ -52,6 +56,9 @@ class Video (models.Model):
 			if self.hoster == 'www.tube8.com':
 				p = re.compile('/(?P<name>[a-zA-Z- ]+)/\d+/$')
 				self.name = p.search(url.path).group("name").replace('-' ,' ')
+			if self.hoster == 'www.xvideos.com':
+				p = re.compile('/video[0-9_]+/(?P<name>[a-zA-Z-_ ]+)$')
+				self.name = p.search(url.path).group("name").replace('_' ,' ')
 
 		if not self.thumb or not self.name:
 			if self.hoster == 'vk.com':
@@ -72,7 +79,7 @@ class Video (models.Model):
 				param['method'] = 'video.get'
 				param['v'] = '3.0'
 				secret = 'gLTHX532pNf1hBIDbzHt'
-				param['access_token'] = 'f59c7e9ba1dae8cff192538dc3f1bd2fdcff192f192539d83b4240fe0326847'
+				param['access_token'] = '074610c05304e43203483dd639036741870034803483dc693809ec1ac215478'
 				param['videos'] = self.video_id
 				param['timestamp'] = str(time.time())
 				keylist = param.keys()
@@ -124,6 +131,16 @@ class Video (models.Model):
 				img_temp.write(urllib2.urlopen(url).read())
 				img_temp.flush()
 				self.thumb.save(self.video_id + '.jpeg', File(img_temp))
+			if self.hoster == 'www.xvideos.com':
+				page = urllib2.urlopen(self.url).read()
+				p = re.compile('flashvars\=.*url_bigthumb\=(?P<img_url>[^&]+)')
+				img = urllib2.urlopen(p.search(page).group("img_url")).read()
+				# import pdb; pdb.set_trace()
+				img_temp = NamedTemporaryFile()
+				img_temp.write(img)
+				img_temp.flush()
+				self.thumb.save(self.video_id + '.jpeg', File(img_temp))
+
 
 		super(Video, self).save(*args, **kwargs)
 

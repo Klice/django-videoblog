@@ -27,6 +27,9 @@ def showvideo_preview(video):
 		return t.render(Context({'video': video })) 
 	if video.hoster== "vk.com":
 		t = get_template('videos/preview_vk.html') 
+		return t.render(Context({'video': video }))
+	if video.hoster== "www.xvideos.com":
+		t = get_template('videos/preview_xvideos.html') 
 		return t.render(Context({'video': video })) 
 
 @register.simple_tag
@@ -39,14 +42,17 @@ def showvideo(video):
 		return t.render(Context({'video': video})) 
 	if video.hoster== "vk.com":
 		t = get_template('videos/video_vk.html') 
-		return t.render(Context({'video': video}))
-		 
+		return t.render(Context({'video': video}))		 
 	if video.hoster== "www.tube8.com":
 		from urlparse import urlparse
 		t = get_template('videos/video_tube8.html')
 		url = urlparse(video.url)
 		em_url = "http://" + url.netloc + "/embed" + url.path
 		return t.render(Context({'video': video, 'em_url': em_url})) 
+	if video.hoster== "www.xvideos.com":
+		t = get_template('videos/video_xvideos.html') 
+		return t.render(Context({'video': video}))
+
 
 @register.simple_tag
 def archive():
