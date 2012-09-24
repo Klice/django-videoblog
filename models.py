@@ -57,7 +57,7 @@ class Video (models.Model):
 				p = re.compile('/(?P<name>[a-zA-Z- ]+)/\d+/$')
 				self.name = p.search(url.path).group("name").replace('-' ,' ')
 			if self.hoster == 'www.xvideos.com':
-				p = re.compile('/video[0-9_]+/(?P<name>[a-zA-Z-_ ]+)$')
+				p = re.compile('/video[0-9_]+/(?P<name>[a-zA-Z-_\. ]+)$')
 				self.name = p.search(url.path).group("name").replace('_' ,' ')
 
 		if not self.thumb or not self.name:
