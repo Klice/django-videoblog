@@ -1,25 +1,23 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.core.urlresolvers import reverse
+import urllib
 import urllib2
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from xml.dom.minidom import parseString
 
 
-
-
-
 class Video (models.Model):
-    url = models.URLField(max_length=255,verbose_name=(u"URL видео"))
-    video_id = models.CharField(max_length=255,verbose_name=(u"ID видео"),blank=True)
-    hoster = models.CharField(max_length=255,verbose_name=(u"Адрес хостинга"),blank=True)
-    player = models.CharField(max_length=255,verbose_name=(u"Ссылка плеера"),blank=True)
-    name = models.CharField(max_length=255,verbose_name=(u"Название"),blank=True)
-    desc = models.TextField(verbose_name=(u"Описание"),blank=True)
+    url = models.URLField(max_length=255, verbose_name=(u"URL видео"))
+    video_id = models.CharField(max_length=255, verbose_name=(u"ID видео"), blank=True)
+    hoster = models.CharField(max_length=255, verbose_name=(u"Адрес хостинга"), blank=True)
+    player = models.CharField(max_length=255, verbose_name=(u"Ссылка плеера"), blank=True)
+    name = models.CharField(max_length=255, verbose_name=(u"Название"), blank=True)
+    desc = models.TextField(verbose_name=(u"Описание"), blank=True)
     date = models.DateTimeField(auto_now_add=True)
-    thumb = models.ImageField(upload_to='thumbs/',verbose_name=(u"Картинка"),blank=True)
-    views = models.IntegerField(verbose_name=(u"Количество просмотров"),default=0)
+    thumb = models.ImageField(upload_to='thumbs/', verbose_name=(u"Картинка"), blank=True)
+    views = models.IntegerField(verbose_name=(u"Количество просмотров"), default=0)
 
     def save(self, *args, **kwargs):
         from urlparse import urlparse
@@ -59,7 +57,7 @@ class Video (models.Model):
                 p = re.compile('/video[0-9_]+/(?P<name>[a-zA-Z-_\. ]+)$')
                 self.name = p.search(url.path).group("name").replace('_', ' ')
             if self.hoster == 'www.eroprofile.com':
-                p = re.compile('/m/videos/view/(?P<name>[a-zA-Z-_\. ]+)$')
+                p = re.compile('/m/videos/view/(?P<name>[0-9a-zA-Z-_\. ]+)$')
                 self.name = p.search(url.path).group("name").replace('-', ' ')
 
         if not self.thumb or not self.name:
@@ -140,8 +138,26 @@ class Video (models.Model):
                 img_temp.flush()
                 self.thumb.save(self.video_id + '.jpeg', File(img_temp))
             if self.hoster == 'www.eroprofile.com':
-                page = urllib2.urlopen(self.url).read()
-                p = re.compile('image:\'(?P<img_url>[^&\']+)\'')
+                page2 = urllib2.urlopen('http://www.eroprofile.com/auth/auth.php?username=' + '*******' + '&password=' + '*******' + '&url=/').read()
+                p = re.compile('src="(?P<auth_url>http://www.eroprofile.com/auth/ss.php?[^"]+)"')
+                auth_url = p.search(page2).group("auth_url")
+                p = re.compile('src="(?P<auth_url>http://www.eroprofiledating.com/auth/ss.php?[^"]+)"')
+                auth_url2 = p.search(page2).group("auth_url")
+
+                opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
+                urllib2.build_opener(urllib2.HTTPHandler(debuglevel=1))
+                urllib2.install_opener(opener)
+                f = opener.open(auth_url)
+                page = f.read()
+                f.close()
+                f = opener.open(auth_url2)
+                page = f.read()
+                f.close()
+                f = opener.open(self.url)
+                page = f.read()
+                f.close()
+
+                p = re.compile(',image:\'(?P<img_url>[^&\']+)\'')
                 img_url = p.search(page).group("img_url")
                 img = urllib2.urlopen('http://www.eroprofile.com' + img_url).read()
                 # import pdb; pdb.set_trace()
