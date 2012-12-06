@@ -34,11 +34,19 @@ def Add_Video_URL(request):
 def detail_video(request, video_id, name):
 	video = get_object_or_404(Video, pk = video_id)
 	user_viewed = request.session.get('video_viewed')
+	last_view = request.session.get('last_view')
 	if not user_viewed:
 		user_viewed = []
 	if not video_id in user_viewed:
 		user_viewed.append(video_id)
 		video.add_view()
+	if last_view:
+		if last_view != video:
+			viewstat, created = ViewStats.objects.get_or_create(video_from=last_view, video_to=video)
+			viewstat.views += 1
+			viewstat.save()
+	# raise ValueError
+	request.session['last_view'] = video
 	request.session['video_viewed'] = user_viewed
 
 	return render_to_response('videodetail.html',locals(),  RequestContext(request))

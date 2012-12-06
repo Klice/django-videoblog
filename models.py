@@ -138,7 +138,7 @@ class Video (models.Model):
                 img_temp.flush()
                 self.thumb.save(self.video_id + '.jpeg', File(img_temp))
             if self.hoster == 'www.eroprofile.com':
-                page2 = urllib2.urlopen('http://www.eroprofile.com/auth/auth.php?username=' + '*******' + '&password=' + '*******' + '&url=/').read()
+                page2 = urllib2.urlopen('http://www.eroprofile.com/auth/auth.php?username=' + 'Jumanji' + '&password=' + 'XN6k350d' + '&url=/').read()
                 p = re.compile('src="(?P<auth_url>http://www.eroprofile.com/auth/ss.php?[^"]+)"')
                 auth_url = p.search(page2).group("auth_url")
                 p = re.compile('src="(?P<auth_url>http://www.eroprofiledating.com/auth/ss.php?[^"]+)"')
@@ -190,3 +190,16 @@ class Video (models.Model):
 
     def __unicode__(self):
         return "%s" % self.name
+
+class ViewStats(models.Model):
+    video_from = models.ForeignKey(Video, related_name='next_videos', verbose_name=(u"Видео с которого перешли"))
+    video_to = models.ForeignKey(Video, related_name='+', verbose_name=(u"Видео на которое перешли"))
+    views = models.IntegerField(verbose_name=(u"Количество переходов"), default=0)
+
+    class Meta:
+        verbose_name = 'ViewStats'
+        verbose_name_plural = 'ViewStatss'
+
+    def __unicode__(self):
+        return "%s -> %s" % (self.video_from.pk,self.video_to.pk)
+    
