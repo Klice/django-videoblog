@@ -15,6 +15,9 @@
 {% if perms.video.can_delete %}
 	<br><a href="{% url delete_video id=video.pk %}?backurl={{request.path}}">удалить</a>
 {% endif %}
+<br><br>
+<h2>С этим видео так же посмотрели</h2>
+{% showrel video 6 %}
 
 {% endblock %} 
 

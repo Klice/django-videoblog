@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.template.defaultfilters import stringfilter
 from videoblog.models import Video
 import datetime
+import itertools
 
 register = template.Library()
 
@@ -35,6 +36,26 @@ def showvideo_preview(video):
         t = get_template('videos/preview_eroprofile.html')
         return t.render(Context({'video': video}))
 
+
+@register.simple_tag
+def showrel(video, num=5):
+    vids = video.GetRel()
+    top = dict(itertools.islice(dict(vids).iteritems(), num))
+    video_list = []
+    for vid in top.keys():
+        video_list.append(vid)
+    videos = Video.objects.in_bulk(video_list)
+    if len(videos)<num:
+        num_add = num - len(videos)
+        rnd = Video.objects.all().order_by('?')[:num_add]
+    else:
+        rnd = []
+    result = []
+    for v in videos.keys():
+        result.append(videos[v])
+    result = list(itertools.chain(result, rnd))
+    t = get_template('video_top.html')
+    return t.render(Context({'videos': result}))
 
 @register.simple_tag
 def showvideo(video):

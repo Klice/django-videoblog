@@ -6,6 +6,8 @@ import urllib2
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from xml.dom.minidom import parseString
+from django.db.models import Q
+import operator
 
 
 class Video (models.Model):
@@ -18,6 +20,21 @@ class Video (models.Model):
     date = models.DateTimeField(auto_now_add=True)
     thumb = models.ImageField(upload_to='thumbs/', verbose_name=(u"Картинка"), blank=True)
     views = models.IntegerField(verbose_name=(u"Количество просмотров"), default=0)
+
+    def GetRel(self):
+        rel = ViewStats.objects.filter(Q(video_from=self.pk) | Q(video_to=self.pk))
+        vids = {}
+        for s in rel:
+            if s.video_from == self.pk:
+                vid = s.video_to.pk
+            else:
+                vid = s.video_from.pk
+            try:
+                vids[vid] += 1 
+            except KeyError:
+                vids[vid] = 1
+        vids = sorted(vids.iteritems(), key=operator.itemgetter(1), reverse=True)
+        return vids
 
     def save(self, *args, **kwargs):
         from urlparse import urlparse
@@ -182,6 +199,7 @@ class Video (models.Model):
     def add_view(self):
         self.views += 1
         self.save()
+
 
     class Meta:
         ordering = ('-date',)
