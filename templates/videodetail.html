@@ -16,17 +16,30 @@
 	<a id="video_decription_link" href=""><img src="/media/img/edit.png"/></a>
 	<script>
 		(function () {
-			$('#video_decription_link').on('click', function (e) {
-				e.preventDefault();
-				text = $('<textarea/>', {text: $('#video_decription').text()});
-				link = $('<a/>', {href: '{% url edit_video_desc id=video.pk %}', text: 'Сохранить'})
-				link.on("click", function(e) {
+			var desc = $('#video_decription')
+			desc.addClass('editable');
+			$('#video_decription_link, #video_decription').on('click', function (e) {
+				if (desc.hasClass('editable')) {
 					e.preventDefault();
-					$.post(link.attr('href'), {text: text.val()}, function(data){
-						$('#video_decription').html(data)
+					e.stopPropagation();
+					desc.removeClass('editable');
+					text = $('<textarea/>', {text: desc.text()});
+					link = $('<a/>', {href: '{% url edit_video_desc id=video.pk %}', text: 'Сохранить'})
+					desc.html(text).append(link);
+					text.focus();
+					text.mouse_is_inside = false;
+					text.hover(function(){text.mouse_is_inside=true;}, function(){text.mouse_is_inside=false; });
+					$("body").on('click', function () {
+						if (text.mouse_is_inside!=true) {
+							e.preventDefault();
+							e.stopPropagation();
+							$.post(link.attr('href'), {text: text.val()}, function(data){
+								desc.html(data)
+								desc.addClass('editable');
+							})			
+						}
 					})
-				})
-				$('#video_decription').html(text).append(link);
+				}
 			})
 		})();
 	</script>
