@@ -23,16 +23,20 @@ class Video (models.Model):
 
     def GetRel(self):
         rel = ViewStats.objects.filter(Q(video_from=self.pk) | Q(video_to=self.pk))
+
         vids = {}
         for s in rel:
-            if s.video_from == self.pk:
-                vid = s.video_to.pk
-            else:
-                vid = s.video_from.pk
             try:
-                vids[vid] += 1 
-            except KeyError:
-                vids[vid] = 1
+                if s.video_from == self.pk:
+                    vid = s.video_to.pk
+                else:
+                    vid = s.video_from.pk
+                try:
+                    vids[vid] += 1
+                except KeyError:
+                    vids[vid] = 1
+            except Video.DoesNotExist:
+                pass
         vids = sorted(vids.iteritems(), key=operator.itemgetter(1), reverse=True)
         return vids
 

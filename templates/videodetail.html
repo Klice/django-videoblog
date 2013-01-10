@@ -11,7 +11,27 @@
 
 <h1>{{ video.name }}</h1>
 {% showvideo video %}
-<p>{{video.desc}}</p>	
+<p id="video_decription" class="video_decription">{{video.desc}}</p>	
+{% if perms.video.can_change %}
+	<a id="video_decription_link" href=""><img src="/media/img/edit.png"/></a>
+	<script>
+		(function () {
+			$('#video_decription_link').on('click', function (e) {
+				e.preventDefault();
+				text = $('<textarea/>', {text: $('#video_decription').text()});
+				link = $('<a/>', {href: '{% url edit_video_desc id=video.pk %}', text: 'Сохранить'})
+				link.on("click", function(e) {
+					e.preventDefault();
+					$.post(link.attr('href'), {text: text.val()}, function(data){
+						$('#video_decription').html(data)
+					})
+				})
+				$('#video_decription').html(text).append(link);
+			})
+		})();
+	</script>
+{% endif %}
+
 {% if perms.video.can_delete %}
 	<br><a href="{% url delete_video id=video.pk %}?backurl={{request.path}}">удалить</a>
 {% endif %}
