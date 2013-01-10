@@ -10,4 +10,7 @@ urlpatterns = patterns('',
     (r'movie/edit_desc/(?P<id>\d+)/$',  'videoblog.views.edit_video_desc', {}, 'edit_video_desc'),
     (r'archive/(?P<month>\d+)/$', 'videoblog.views.videolist', {}, 'video_list_archive'),
     (r'archive/(?P<month>\d+)/(?P<cur_page>\d+)/$',  'videoblog.views.videolist', {}, 'video_list_archive_page'),
+
+    (r'movie/vote_good/(?P<id>\d+)/$', 'videoblog.views.video_vote', {'res': 1,}, 'video_vote_good'),
+    (r'movie/vote_bad/(?P<id>\d+)/$', 'videoblog.views.video_vote', {'res': -1,}, 'video_vote_bad'),
 )

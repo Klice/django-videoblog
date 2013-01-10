@@ -20,7 +20,13 @@ class Video (models.Model):
     date = models.DateTimeField(auto_now_add=True)
     thumb = models.ImageField(upload_to='thumbs/', verbose_name=(u"Картинка"), blank=True)
     views = models.IntegerField(verbose_name=(u"Количество просмотров"), default=0)
+    voters = models.IntegerField(verbose_name=(u"Общее количество проголосовавших"), default=0)
+    voters_bad = models.IntegerField(verbose_name=(u"Количество проголосовавших 'против'"), default=0)
+    voters_good = models.IntegerField(verbose_name=(u"Количество проголосовавших 'за'"), default=0)
 
+    def rating(self):
+        return self.voters_good - self.voters_bad
+        
     def GetRel(self):
         rel = ViewStats.objects.filter(Q(video_from=self.pk) | Q(video_to=self.pk))
 

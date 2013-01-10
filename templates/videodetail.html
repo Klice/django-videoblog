@@ -10,12 +10,40 @@
 
 
 <h1>{{ video.name }}</h1>
+
+<div class="rating_box">
+	<div class="rating {% if video.rating < 0 %} rating_red {%else%} rating_green {%endif%}">{{ video.rating }}</div>
+	<p class="vote_buttons">
+		<a class="vote_link" data-res="bad" href="#"><img src="/media/img/thumb_down.png" alt="Мне не понравилось" title="Мне не понравилось"></a>
+		<a class="vote_link" data-res="good" href="#"><img src="/media/img/thumb_up.png" alt="Мне понравилось" title="Мне понравилось"></a>
+	</p>
+	<p class="voters_total">{{ video.voters }} голосов</p>
+</div>
+
 {% showvideo video %}
 <p id="video_decription" class="video_decription">{{video.desc}}</p>	
 {% if perms.video.can_change %}
 	<a id="video_decription_link" href=""><img src="/media/img/edit.png"/></a>
+
+	<p id="vote"><span class="voters_bad">{{ video.voters_bad }}</span> <span class="voters">{{ video.voters }}</span> <span class="voters_good">{{ video.voters_good }}</span></p>
 	<script>
 		(function () {
+			$(".vote_link").on('click', function (e) {
+				e.preventDefault();
+				var url;
+				if ($(this).data('res') == 'good') {
+					url = '{% url video_vote_good id=video.pk %}';
+				} else {
+					url = '{% url video_vote_bad id=video.pk %}';
+				}
+
+				$.post(url, function(data){
+					var v = $('.rating_box')
+					v.children(".rating").text(data.voters_good - data.voters_bad);
+					v.children(".voters_total").text(data.voters + ' голосов');
+				}, 'json')				
+			})
+
 			var desc = $('#video_decription')
 			desc.addClass('editable');
 			$('#video_decription_link, #video_decription').on('click', function (e) {
@@ -36,7 +64,7 @@
 							$.post(link.attr('href'), {text: text.val()}, function(data){
 								desc.html(data)
 								desc.addClass('editable');
-							})			
+							})
 						}
 					})
 				}

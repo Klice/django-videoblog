@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator
+import json
 
 
 def videolist(request, cur_page=1, month=0):
@@ -74,3 +75,42 @@ def edit_video_desc(request, id):
     except MultiValueDictKeyError:
         pass
     return HttpResponse(video.desc)
+
+def video_vote(request, id, res):
+    if request.is_ajax():
+        try:
+            video_voting = json.loads(request.COOKIES.get('video_voting'))
+        except ValueError:
+            video_voting = {}
+
+        video = get_object_or_404(Video, pk=id)
+        try:
+            res_old = video_voting[id]
+        except KeyError:
+            video.voters += 1
+            res_old = 0
+
+        if res>0:
+            if res_old == -1:
+                video.voters_bad -= 1
+            if res_old != 1:
+                video.voters_good += 1
+            video_voting[id] = 1
+        else:
+            if res_old == 1:
+                video.voters_good -= 1
+            if res_old != -1:
+                video.voters_bad += 1
+            video_voting[id] = -1
+        video.save()
+        response_data = {}
+        response_data['voters'] = video.voters
+        response_data['voters_bad'] = video.voters_bad
+        response_data['voters_good'] = video.voters_good
+        response = HttpResponse(json.dumps(response_data), mimetype="application/json")
+        response.set_cookie('video_voting', json.dumps(video_voting)) 
+        
+        return response
+    else:
+        return HttpResponse(code=403)
+
