@@ -80,7 +80,7 @@ def video_vote(request, id, res):
     if request.is_ajax():
         try:
             video_voting = json.loads(request.COOKIES.get('video_voting'))
-        except ValueError:
+        except (ValueError, TypeError):
             video_voting = {}
 
         video = get_object_or_404(Video, pk=id)

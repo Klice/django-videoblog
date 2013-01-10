@@ -19,13 +19,6 @@
 	</p>
 	<p class="voters_total">{{ video.voters }} голосов</p>
 </div>
-
-{% showvideo video %}
-<p id="video_decription" class="video_decription">{{video.desc}}</p>	
-{% if perms.video.can_change %}
-	<a id="video_decription_link" href=""><img src="/media/img/edit.png"/></a>
-
-	<p id="vote"><span class="voters_bad">{{ video.voters_bad }}</span> <span class="voters">{{ video.voters }}</span> <span class="voters_good">{{ video.voters_good }}</span></p>
 	<script>
 		(function () {
 			$(".vote_link").on('click', function (e) {
@@ -37,13 +30,27 @@
 					url = '{% url video_vote_bad id=video.pk %}';
 				}
 
-				$.post(url, function(data){
-					var v = $('.rating_box')
-					v.children(".rating").text(data.voters_good - data.voters_bad);
-					v.children(".voters_total").text(data.voters + ' голосов');
-				}, 'json')				
+				$.ajax({
+					url: url,
+					dataType: 'json',
+					success: function(data) {
+						var v = $('.rating_box')
+						v.children(".rating").text(data.voters_good - data.voters_bad);
+						v.children(".voters_total").text(data.voters + ' голосов');
+					}
+				})				
 			})
+		})()
+	</script>
 
+{% showvideo video %}
+<p id="video_decription" class="video_decription">{{video.desc}}</p>	
+{% if perms.video.can_change %}
+	<a id="video_decription_link" href=""><img src="/media/img/edit.png"/></a>
+
+	<p id="vote"><span class="voters_bad">{{ video.voters_bad }}</span> <span class="voters">{{ video.voters }}</span> <span class="voters_good">{{ video.voters_good }}</span></p>
+	<script>
+		(function () {
 			var desc = $('#video_decription')
 			desc.addClass('editable');
 			$('#video_decription_link, #video_decription').on('click', function (e) {
