@@ -11,6 +11,10 @@
 <li class="videoitem">
 	<p class="date">{{ video.date|date:"j M Y" }}</p>
 	<a class="videotitle" href="{{video.get_absolute_url}}">{{video.name}}</a>
+	<div class="rating_box">
+	<div class="rating {% if video.rating < 0 %} rating_red {%else%} rating_green {%endif%}">{{ video.rating }}</div>
+		<p class="voters_total">{{ video.voters }} {{ video.voters|rupluralize:'голос,голоса,голосов' }}</p>
+	</div>
 	{% showvideo_preview video %}
 	<p>Просмотров: {{video.views}}</p>
 	<a href="{{video.get_absolute_url}}">смотреть...</a>

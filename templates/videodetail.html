@@ -14,10 +14,10 @@
 <div class="rating_box">
 	<div class="rating {% if video.rating < 0 %} rating_red {%else%} rating_green {%endif%}">{{ video.rating }}</div>
 	<p class="vote_buttons">
-		<a class="vote_link" data-res="bad" href="#"><img src="/media/img/thumb_down.png" alt="Мне не понравилось" title="Мне не понравилось"></a>
-		<a class="vote_link" data-res="good" href="#"><img src="/media/img/thumb_up.png" alt="Мне понравилось" title="Мне понравилось"></a>
+		<a class="vote_link" data-res="bad" rel="nofollow" href="#"><img src="/media/img/thumb_down.png" alt="Мне не понравилось" title="Мне не понравилось"></a>
+		<a class="vote_link" data-res="good" rel="nofollow" href="#"><img src="/media/img/thumb_up.png" alt="Мне понравилось" title="Мне понравилось"></a>
 	</p>
-	<p class="voters_total">{{ video.voters }} голосов</p>
+	<p class="voters_total">{{ video.voters }} {{ video.voters|rupluralize:'голос,голоса,голосов' }}</p>
 </div>
 	<script>
 		(function () {
