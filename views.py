@@ -34,6 +34,24 @@ def Add_Video_URL(request):
             pass
     return HttpResponse(status=400)
 
+def Add_Video_Amazon_URL(request):
+    # import pdb; pdb.set_trace()
+    if request.method == 'GET':
+        try:
+            video = Video(
+                url='http://candybox.peegirl.ru/movie/' + request.GET["id"],
+                video_id=request.GET["id"],
+                hoster="amazon",
+                name=request.GET["filename"]
+            )
+            video.save()
+            response = HttpResponse()
+            response.write(u"Готово")
+            return response
+        except AttributeError:
+            pass
+    return HttpResponse(status=400)
+
 
 def detail_video(request, video_id, name):
     video = get_object_or_404(Video, pk=video_id)

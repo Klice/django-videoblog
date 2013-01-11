@@ -26,7 +26,11 @@ class Video (models.Model):
 
     def rating(self):
         return self.voters_good - self.voters_bad
-        
+    
+    def get_video_url(self):
+        if self.hoster == "amazon":
+            return urllib2.urlopen("http://candybox.peegirl.ru/ticket.php?fid=%s" % self.video_id).read()
+
     def GetRel(self):
         rel = ViewStats.objects.filter(Q(video_from=self.pk) | Q(video_to=self.pk))
 

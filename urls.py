@@ -13,4 +13,6 @@ urlpatterns = patterns('',
 
     (r'movie/vote_good/(?P<id>\d+)/$', 'videoblog.views.video_vote', {'res': 1,}, 'video_vote_good'),
     (r'movie/vote_bad/(?P<id>\d+)/$', 'videoblog.views.video_vote', {'res': -1,}, 'video_vote_bad'),
+
+    (r'add_amazon_url/$', 'videoblog.views.Add_Video_Amazon_URL'),
 )

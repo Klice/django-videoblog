@@ -60,7 +60,9 @@ def showvideo_preview(video):
     if video.hoster == "www.eroprofile.com":
         t = get_template('videos/preview_eroprofile.html')
         return t.render(Context({'video': video}))
-
+    if video.hoster == "amazon":
+        t = get_template('videos/preview_amazon.html')
+        return t.render(Context({'video': video}))
 
 @register.simple_tag
 def showrel(video, num=5):
@@ -106,7 +108,9 @@ def showvideo(video):
     if video.hoster == "www.eroprofile.com":
         t = get_template('videos/video_eroprofile.html')
         return t.render(Context({'video': video}))
-
+    if video.hoster == "amazon":
+        t = get_template('videos/video_amazon.html')
+        return t.render(Context({'video': video}))
 
 @register.simple_tag
 def archive():
