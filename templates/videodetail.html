@@ -1,23 +1,24 @@
 {% extends "base.html" %} 
 
-{% block title %}Писающие девочки | {{ video.name }} {% endblock %}
-{% block keywords %} {{ video.name }} {% endblock %}
+{% block title %}{{ video.name }}{% endblock %}
+{% block keywords %}{{ video.name }}{% endblock %}
+{% block description %}{{video.desc}}{% endblock %}
 
+{% block header %}{{ video.name }}{% endblock %} 
 
 {% block content %} 
 
 {% load tags %}
+<meta itemprop="name" content="{{ video.name }}"/>
+<div itemscope itemtype="http://schema.org/VideoObject">
 
-
-<h1>{{ video.name }}</h1>
-
-<div class="rating_box">
-	<div class="rating {% if video.rating < 0 %} rating_red {%else%} rating_green {%endif%}">{{ video.rating }}</div>
+<div class="rating_box" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+	<div class="rating {% if video.rating < 0 %} rating_red {%else%} rating_green {%endif%}" itemprop="ratingValue">{{ video.rating }}</div>
 	<p class="vote_buttons">
 		<a class="vote_link" data-res="bad" rel="nofollow" href="#"><img src="/media/img/thumb_down.png" alt="Мне не понравилось" title="Мне не понравилось"></a>
 		<a class="vote_link" data-res="good" rel="nofollow" href="#"><img src="/media/img/thumb_up.png" alt="Мне понравилось" title="Мне понравилось"></a>
 	</p>
-	<p class="voters_total">{{ video.voters }} {{ video.voters|rupluralize:'голос,голоса,голосов' }}</p>
+	<p class="voters_total"><span itemprop="ratingCount">{{ video.voters }}</span> {{ video.voters|rupluralize:'голос,голоса,голосов' }}</p>
 </div>
 	<script>
 		(function () {
@@ -44,7 +45,21 @@
 	</script>
 
 {% showvideo video %}
-<p id="video_decription" class="video_decription">{{video.desc}}</p>	
+<p itemprop="description" id="video_decription" class="video_decription">{{video.desc}}</p>	
+
+<!-- AddThis Button BEGIN -->
+<div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+<a class="addthis_button_preferred_1"></a>
+<a class="addthis_button_preferred_2"></a>
+<a class="addthis_button_preferred_3"></a>
+<a class="addthis_button_preferred_4"></a>
+<a class="addthis_button_compact"></a>
+<a class="addthis_counter addthis_bubble_style"></a>
+</div>
+<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-50f397322e8ef68a"></script>
+<!-- AddThis Button END -->
+
 {% if perms.video.can_change %}
 	<a id="video_decription_link" href=""><img src="/media/img/edit.png"/></a>
 
@@ -84,6 +99,7 @@
 	<br><a href="{% url delete_video id=video.pk %}?backurl={{request.path}}">удалить</a>
 {% endif %}
 <br><br>
+</div>
 <h2>С этим видео так же посмотрели</h2>
 {% showrel video 6 %}
 

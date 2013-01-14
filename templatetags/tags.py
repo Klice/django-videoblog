@@ -2,18 +2,11 @@
 from django import template
 from django.template.loader import get_template
 from django.template import Context
-from django.template.defaultfilters import stringfilter
 from videoblog.models import Video
 import datetime
 import itertools
 
 register = template.Library()
-
-
-@register.filter
-@stringfilter
-def cutend(value, arg):
-    return value[-eval(arg):]
 
 
 @register.filter

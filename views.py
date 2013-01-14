@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseRedirect
 from videoblog.models import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -33,6 +33,7 @@ def Add_Video_URL(request):
         except AttributeError:
             pass
     return HttpResponse(status=400)
+
 
 def Add_Video_Amazon_URL(request):
     # import pdb; pdb.set_trace()
@@ -94,6 +95,7 @@ def edit_video_desc(request, id):
         pass
     return HttpResponse(video.desc)
 
+
 def video_vote(request, id, res):
     if request.is_ajax():
         try:
@@ -108,7 +110,7 @@ def video_vote(request, id, res):
             video.voters += 1
             res_old = 0
 
-        if res>0:
+        if res > 0:
             if res_old == -1:
                 video.voters_bad -= 1
             if res_old != 1:
@@ -126,9 +128,8 @@ def video_vote(request, id, res):
         response_data['voters_bad'] = video.voters_bad
         response_data['voters_good'] = video.voters_good
         response = HttpResponse(json.dumps(response_data), mimetype="application/json")
-        response.set_cookie('video_voting', json.dumps(video_voting)) 
-        
+        response.set_cookie('video_voting', json.dumps(video_voting))
+
         return response
     else:
-        return HttpResponse(code=403)
-
+        return HttpResponse(status=400)

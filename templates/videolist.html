@@ -1,4 +1,9 @@
 {% extends "base.html" %} 
+
+{% block header %}
+{% if not curpage.number == 1 %}Страница: {{curpage.number}}{%else%}Коллекция бесплатного порно-видео с писающими девушками{%endif%}
+{% endblock %} 
+
 {% block content %} 
 
 {% load tags %}
@@ -8,21 +13,22 @@
 <ul class="videolist">
 
 {% for video in videos %} 
-<li class="videoitem">
-	<p class="date">{{ video.date|date:"j M Y" }}</p>
-	<a class="videotitle" href="{{video.get_absolute_url}}">{{video.name}}</a>
-	<div class="rating_box">
-	<div class="rating {% if video.rating < 0 %} rating_red {%else%} rating_green {%endif%}">{{ video.rating }}</div>
-		<p class="voters_total">{{ video.voters }} {{ video.voters|rupluralize:'голос,голоса,голосов' }}</p>
+<li class="videoitem" itemscope itemtype="http://schema.org/VideoObject">
+	<time itemprop="uploadDate" class="date" datetime="{{ video.date|date:"c" }}">{{ video.date|date:"j M Y" }}</time>
+	<meta itemprop="url" content="http://{{request.META.SERVER_NAME}}{{video.get_absolute_url}}">
+	<meta itemprop="playerType" content="Flash"/>
+	<h2><a itemprop="name" class="videotitle" href="{{video.get_absolute_url}}">{{video.name}}</a></h2>
+	<div class="rating_box" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+		<div class="rating {% if video.rating < 0 %} rating_red {%else%} rating_green {%endif%}" itemprop="ratingValue">{{ video.rating }}</div>
+		<p class="voters_total"><span itemprop="ratingCount">{{ video.voters }}</span> {{ video.voters|rupluralize:'голос,голоса,голосов' }}</p>
 	</div>
 	{% showvideo_preview video %}
-	<p>Просмотров: {{video.views}}</p>
-	<a href="{{video.get_absolute_url}}">смотреть...</a>
+	<p itemprop="interactionCount" class="views">Просмотров: {{video.views}}</p>
+	<br/>
+	<a href="{{video.get_absolute_url}}">смотреть онлайн...</a>
 	{% if perms.video.can_delete %}
 	<a style="float: right" href="{% url delete_video id=video.pk %}?backurl={{request.path}}">удалить</a>
 	{% endif %}
-
-
 </li>
 {% endfor %} 
 

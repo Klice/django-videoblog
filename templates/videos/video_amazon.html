@@ -1,6 +1,17 @@
 <div id="embedFlashPlayer"></div>
-<script src="/media/js/jwplayer.js" type="text/javascript" language="javascript"></script>
-<script type="text/javascript" language="javascript">
-jwplayer ('embedFlashPlayer').setup ({flashplayer:'/media/swf/jwplayer5.swf',id:'moviePlayer',width:590,height:443,file:'{{video.get_video_url}}',image:'http://candybox.peegirl.ru/preview/{{ video.video_id }}.jpg',
-	provider:'http',controlbar:'bottom',stretching:'uniform',abouttext:'EroProfile',aboutlink:'http://www.peegirl.ru/'});
+<script src="/media/js/jwplayer.js"></script>
+<script>
+jwplayer ('embedFlashPlayer').setup ({
+	id:'moviePlayer',
+	flashplayer: "/media/swf/player.swf",
+	width:590,
+	height:443,
+	title: '{{ video.name }}',
+	file:'{{video.get_video_url}}',
+	image:'http://candybox.peegirl.ru/preview/{{ video.video_id }}.jpg',
+	stretching:'uniform',
+	abouttext:'PeeGirl',
+	aboutlink:'http://www.peegirl.ru/'
+});
 </script>
+<meta itemprop="thumbnailUrl" content="http://candybox.peegirl.ru/preview/{{ video.video_id }}.jpg"/>

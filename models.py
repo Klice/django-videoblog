@@ -8,6 +8,9 @@ from django.core.files.temp import NamedTemporaryFile
 from xml.dom.minidom import parseString
 from django.db.models import Q
 import operator
+from django.contrib.sitemaps import ping_google
+
+
 
 
 class Video (models.Model):
@@ -204,6 +207,10 @@ class Video (models.Model):
                 self.thumb.save(self.video_id + '.jpeg', File(img_temp))
 
         super(Video, self).save(*args, **kwargs)
+        try:
+            ping_google()
+        except Exception:
+            pass
 
     def get_absolute_url(self):
         # import pdb; pdb.set_trace()
@@ -234,4 +241,3 @@ class ViewStats(models.Model):
 
     def __unicode__(self):
         return "%s -> %s" % (self.video_from.pk,self.video_to.pk)
-    

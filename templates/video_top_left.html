@@ -1,4 +1,4 @@
-<h2>Самое популярное</h2>
+<h3>Самое популярное видео</h3>
 <ol class="videotop_left">
 {% for video in videos %}
 <li><a href="{{video.get_absolute_url}}">{{video.name|truncatechars:40}} <span>{{video.rating}}</span></a></li>

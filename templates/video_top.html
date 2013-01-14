@@ -1,6 +1,6 @@
 {% load tags %}
 <ul class="videotop">
 {% for video in videos %}
-<li>{% showvideo_preview video %}</li>
+<li itemscope itemtype="http://schema.org/VideoObject">{% showvideo_preview video %}</li>
 {% endfor %}
 </ul>
