@@ -7,14 +7,17 @@ from django.shortcuts import get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator
+from tagging.models import TaggedItem
 import json
 
 
-def videolist(request, cur_page=1, month=0):
+def videolist(request, cur_page=1, month=0, tag=None):
     if month > 0:
         paginator = Paginator(Video.objects.filter(date__month=month), 10)
     else:
         paginator = Paginator(Video.objects.all(), 10)
+    if tag != None:
+        paginator = Paginator(TaggedItem.objects.get_by_model(Video.objects.all(), tag + ','), 10)
     curpage = paginator.page(cur_page)
     videos = curpage.object_list
     return render_to_response('videolist.html', locals(), RequestContext(request))
@@ -94,6 +97,17 @@ def edit_video_desc(request, id):
     except MultiValueDictKeyError:
         pass
     return HttpResponse(video.desc)
+
+
+@user_passes_test(lambda u: u.has_perm('video.can_change'))
+def edit_video_tags(request, id):
+    video = get_object_or_404(Video, pk=id)
+    try:
+        video.tags = request.POST["tags"]
+        video.save()
+    except MultiValueDictKeyError:
+        pass
+    return HttpResponse(video.tags)
 
 
 def video_vote(request, id, res):

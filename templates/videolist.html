@@ -1,14 +1,18 @@
 {% extends "base.html" %} 
 
+{% load tagging_tags %}
+
 {% block header %}
-{% if not curpage.number == 1 %}Страница: {{curpage.number}}{%else%}Коллекция бесплатного порно-видео с писающими девушками{%endif%}
+{% if not curpage.number == 1 %}Страница: {{curpage.number}}
+{% elif tag %}{{tag}}
+{%else%}Коллекция бесплатного порно-видео с писающими девушками{%endif%}
 {% endblock %} 
 
 {% block content %} 
 
 {% load tags %}
 
-{% paginator month=month cur_page=curpage pages=paginator%}
+{% paginator month=month cur_page=curpage pages=paginator tag=tag%}
 
 <ul class="videolist">
 
@@ -23,6 +27,12 @@
 		<p class="voters_total"><span itemprop="ratingCount">{{ video.voters }}</span> {{ video.voters|rupluralize:'голос,голоса,голосов' }}</p>
 	</div>
 	{% showvideo_preview video %}
+	{% tags_for_object video as tags %}
+	<ul class="tags_list">
+	    {% for tag in tags %}
+	        <li class="tag"><a href="{% url tag_list tag=tag.name %}">{{tag.name}}</a></li>
+	    {% endfor %}
+	</ul>
 	<p itemprop="interactionCount" class="views">Просмотров: {{video.views}}</p>
 	<br/>
 	<a href="{{video.get_absolute_url}}">смотреть онлайн...</a>
@@ -34,6 +44,6 @@
 
 </ul>
 
-{% paginator month=month cur_page=curpage pages=paginator%}
+{% paginator month=month cur_page=curpage pages=paginator tag=tag%}
 
 {% endblock %} 

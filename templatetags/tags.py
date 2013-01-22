@@ -105,6 +105,7 @@ def showvideo(video):
         t = get_template('videos/video_amazon.html')
         return t.render(Context({'video': video}))
 
+
 @register.simple_tag
 def archive():
     videos = Video.objects.filter().order_by('-date')
@@ -134,6 +135,6 @@ def archive():
 
 
 @register.simple_tag
-def paginator(cur_page, pages, month=0):
+def paginator(cur_page, pages, month=0, tag=None):
     t = get_template('paginator.html')
-    return t.render(Context({'cur_page': cur_page, 'pages': pages, 'month': month}))
+    return t.render(Context({'cur_page': cur_page, 'pages': pages, 'month': month, 'tag': tag}))

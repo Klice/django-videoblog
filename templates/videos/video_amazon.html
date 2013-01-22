@@ -11,7 +11,11 @@ jwplayer ('embedFlashPlayer').setup ({
 	image:'http://candybox.peegirl.ru/preview/{{ video.video_id }}.jpg',
 	stretching:'uniform',
 	abouttext:'PeeGirl',
-	aboutlink:'http://www.peegirl.ru/'
+	aboutlink:'http://www.peegirl.ru/',
+	provider: 'http',
+	'http.start':'start'
 });
 </script>
 <meta itemprop="thumbnailUrl" content="http://candybox.peegirl.ru/preview/{{ video.video_id }}.jpg"/>
+
+<a class="video_download" href="{{video.get_video_url}}">Скачать видео</a>

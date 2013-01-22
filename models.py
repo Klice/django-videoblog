@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.core.urlresolvers import reverse
-import urllib
 import urllib2
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
@@ -9,8 +8,11 @@ from xml.dom.minidom import parseString
 from django.db.models import Q
 import operator
 from django.contrib.sitemaps import ping_google
+from tagging.fields import TagField
 
 
+class VideoTags(TagField):
+    pass
 
 
 class Video (models.Model):
@@ -26,10 +28,11 @@ class Video (models.Model):
     voters = models.IntegerField(verbose_name=(u"Общее количество проголосовавших"), default=0)
     voters_bad = models.IntegerField(verbose_name=(u"Количество проголосовавших 'против'"), default=0)
     voters_good = models.IntegerField(verbose_name=(u"Количество проголосовавших 'за'"), default=0)
+    tags = VideoTags(verbose_name=(u"Тэги"))
 
     def rating(self):
         return self.voters_good - self.voters_bad
-    
+
     def get_video_url(self):
         if self.hoster == "amazon":
             return urllib2.urlopen("http://candybox.peegirl.ru/ticket.php?fid=%s" % self.video_id).read()
@@ -221,7 +224,6 @@ class Video (models.Model):
         self.views += 1
         self.save()
 
-
     class Meta:
         ordering = ('-date',)
         get_latest_by = 'date'
@@ -229,6 +231,9 @@ class Video (models.Model):
 
     def __unicode__(self):
         return "%s" % self.name
+
+# tagging.register(Video)
+
 
 class ViewStats(models.Model):
     video_from = models.ForeignKey(Video, related_name='next_videos', verbose_name=(u"Видео с которого перешли"))
@@ -240,4 +245,4 @@ class ViewStats(models.Model):
         verbose_name_plural = 'ViewStatss'
 
     def __unicode__(self):
-        return "%s -> %s" % (self.video_from.pk,self.video_to.pk)
+        return "%s -> %s" % (self.video_from.pk, self.video_to.pk)

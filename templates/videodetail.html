@@ -8,6 +8,7 @@
 
 {% block content %} 
 
+{% load tagging_tags %}
 {% load tags %}
 <meta itemprop="name" content="{{ video.name }}"/>
 <div itemscope itemtype="http://schema.org/VideoObject">
@@ -45,6 +46,12 @@
 	</script>
 
 {% showvideo video %}
+{% tags_for_object video as tags %}
+<ul class="tags_list">
+    {% for tag in tags %}
+        <li class="tag"><a href="{% url tag_list tag=tag.name %}">{{tag.name}}</a></li>
+    {% endfor %}
+</ul>
 <p itemprop="description" id="video_decription" class="video_decription">{{video.desc}}</p>	
 
 <!-- AddThis Button BEGIN -->
@@ -63,7 +70,8 @@
 {% if perms.video.can_change %}
 	<a id="video_decription_link" href=""><img src="/media/img/edit.png"/></a>
 
-	<p id="vote"><span class="voters_bad">{{ video.voters_bad }}</span> <span class="voters">{{ video.voters }}</span> <span class="voters_good">{{ video.voters_good }}</span></p>
+	<a id="video_tags_link" href=""><img src="/media/img/edit.png"/></a>
+
 	<script>
 		(function () {
 			var desc = $('#video_decription')
@@ -102,6 +110,12 @@
 </div>
 <h2>С этим видео так же посмотрели</h2>
 {% showrel video 6 %}
+<br><br>
+<div class="parnter_a">
+<h2>Реклама наших партнеров</h2>
+<script id="runet5631ce92a2618681ae9998c7b83980fb" type="text/javascript">(function(d, s, id, uid) {function dLoad() {var js, rjs = d.getElementById(uid);if (d.getElementById(id)) id=id+Math.random();var dv = d.createElement("div");dv.id = "5631ce92a2618681ae9998c7b83980fb";rjs.parentNode.insertBefore(dv , rjs);js = d.createElement(s); js.id = id;js.src = "//tools.runetki.com/din.php?src=5631ce92a2618681ae9998c7b83980fb&bg=none&w=640&h=200";rjs.parentNode.insertBefore(js, rjs);}if (window.addEventListener) {window.addEventListener("load", dLoad, false);} else if (window.attachEvent) {window.attachEvent("onload",dLoad);}}(document, "script", "rundin","runet5631ce92a2618681ae9998c7b83980fb"));
+</script>
+</div>
 
 {% endblock %} 
 
