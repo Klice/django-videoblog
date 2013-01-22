@@ -9,8 +9,10 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator
 from tagging.models import TaggedItem
 import json
+from django.views.decorators.cache import cache_page
 
 
+@cache_page(60 * 60)
 def videolist(request, cur_page=1, month=0, tag=None):
     if month > 0:
         paginator = Paginator(Video.objects.filter(date__month=month), 10)

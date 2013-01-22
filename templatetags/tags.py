@@ -5,6 +5,7 @@ from django.template import Context
 from videoblog.models import Video
 import datetime
 import itertools
+from django.views.decorators.cache import cache_page
 
 register = template.Library()
 
@@ -57,6 +58,8 @@ def showvideo_preview(video):
         t = get_template('videos/preview_amazon.html')
         return t.render(Context({'video': video}))
 
+
+@cache_page(60 * 60)
 @register.simple_tag
 def showrel(video, num=5):
     vids = video.GetRel()
