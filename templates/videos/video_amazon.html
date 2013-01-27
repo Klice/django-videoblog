@@ -1,3 +1,17 @@
+<script type="text/javascript">
+var exoOpts = {
+  cat: '137',
+  login: 'Klice',
+  idzone_300x250: '472521',
+  idzone_468x60: '472521',
+  idsite: '181321',
+  pause: {},
+  postroll: {},
+  show_thumb: '1'
+};
+</script>
+<script type="text/javascript" src="http://ads.exoclick.com/invideo.js"></script>
+
 <div id="embedFlashPlayer"></div>
 <script src="/media/js/jwplayer.js"></script>
 <script>
@@ -8,14 +22,23 @@ jwplayer ('embedFlashPlayer').setup ({
 	height:443,
 	title: '{{ video.name }}',
 	file:'{{video.get_video_url}}',
-	image:'http://candybox.peegirl.ru/preview/{{ video.video_id }}.jpg',
+	image:'http://candybox.peegirl.info/preview/{{ video.video_id }}.jpg',
 	stretching:'uniform',
 	abouttext:'PeeGirl',
-	aboutlink:'http://www.peegirl.ru/',
+	aboutlink:'http://www.peegirl.info/',
 	provider: 'http',
 	'http.start':'start'
 });
-</script>
-<meta itemprop="thumbnailUrl" content="http://candybox.peegirl.ru/preview/{{ video.video_id }}.jpg"/>
 
-<a class="video_download" href="{{video.get_video_url}}">Скачать видео</a>
+var params = {
+	'wmode': 'transparent',
+	ignore_swfobject: '1'
+};
+</script>
+
+<meta itemprop="thumbnailUrl" content="http://candybox.peegirl.info/preview/{{ video.video_id }}.jpg"/>
+<meta property="og:title" content="{{video.name}}" />
+<meta property="og:description" content="{{video.desc}}" />
+<meta property="og:image" content="http://candybox.peegirl.info/preview/{{ video.video_id }}.jpg" />   
+<meta property="og:video:width" content="640" />    
+<meta property="og:video:height" content="480" />

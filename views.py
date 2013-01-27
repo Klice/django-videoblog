@@ -13,7 +13,7 @@ from django.views.decorators.cache import cache_page
 
 
 @cache_page(60 * 60)
-def videolist(request, cur_page=1, month=0, tag=None):
+def videolist(request, cur_page=1, month=None, tag=None):
     if month > 0:
         paginator = Paginator(Video.objects.filter(date__month=month), 10)
     else:

@@ -138,6 +138,6 @@ def archive():
 
 
 @register.simple_tag
-def paginator(cur_page, pages, month=0, tag=None):
+def paginator(cur_page, pages, month=None, tag=None):
     t = get_template('paginator.html')
     return t.render(Context({'cur_page': cur_page, 'pages': pages, 'month': month, 'tag': tag}))
