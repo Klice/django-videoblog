@@ -1,10 +1,10 @@
 Страницы:
-<ul class="paginator">
-
-
+<div class="paginator">
+	<ul class="pages">
 	{% for page in pages.page_range %}
 		<li {% if cur_page.number == page %} class="active" {% endif %} ><a href="{% url video_list_page month=month tag=tag cur_page=page %}">{{ page }}</a></li>
 	{% endfor %} 
+	</ul>
 	<div class="nav_arr">
 	{% if cur_page.has_previous %}
 		<a class="nav_prev" href="{% url video_list_page tag=tag month=month cur_page=cur_page.previous_page_number %}">&larr; сюда</a>
@@ -13,6 +13,6 @@
 		<a class="nav_next" href="{% url video_list_page tag=tag month=month cur_page=cur_page.next_page_number %}">туда &rarr;</a>
 	{% endif %}
 	</div>
+</div>
 
 
-</ul>

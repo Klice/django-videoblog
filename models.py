@@ -9,6 +9,7 @@ from django.db.models import Q
 import operator
 from django.contrib.sitemaps import ping_google
 from tagging.fields import TagField
+from django.core.cache import cache
 
 
 class VideoTags(TagField):
@@ -210,6 +211,7 @@ class Video (models.Model):
                 self.thumb.save(self.video_id + '.jpeg', File(img_temp))
 
         super(Video, self).save(*args, **kwargs)
+        cache._cache.flush_all()
         try:
             ping_google()
         except Exception:
