@@ -19,9 +19,13 @@
 {% for video in videos %} 
 <li class="videoitem" itemscope itemtype="http://schema.org/VideoObject">
 	<time itemprop="uploadDate" class="date" datetime="{{ video.date|date:"c" }}">{{ video.date|date:"j M Y" }}</time>
+	{%if video.hoster != 'image' %}
 	<meta itemprop="url" content="http://{{request.META.SERVER_NAME}}{{video.get_absolute_url}}">
 	<meta itemprop="playerType" content="Flash"/>
 	<h2><a itemprop="name" class="videotitle" href="{{video.get_absolute_url}}">{{video.name}}</a></h2>
+	{%else%}
+	<div class="notitle">&nbsp;</div>
+	{%endif%}
 	<div class="rating_box" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
 		<div class="rating {% if video.rating < 0 %} rating_red {%else%} rating_green {%endif%}" itemprop="ratingValue">{{ video.rating }}</div>
 		<p class="voters_total"><span itemprop="ratingCount">{{ video.voters }}</span> {{ video.voters|rupluralize:'голос,голоса,голосов' }}</p>

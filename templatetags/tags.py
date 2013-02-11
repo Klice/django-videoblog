@@ -57,7 +57,9 @@ def showvideo_preview(video):
     if video.hoster == "amazon":
         t = get_template('videos/preview_amazon.html')
         return t.render(Context({'video': video}))
-
+    if video.hoster == "image":
+        t = get_template('videos/preview_image.html')
+        return t.render(Context({'video': video}))
 
 @cache_page(60 * 60)
 @register.simple_tag
@@ -106,6 +108,9 @@ def showvideo(video):
         return t.render(Context({'video': video}))
     if video.hoster == "amazon":
         t = get_template('videos/video_amazon.html')
+        return t.render(Context({'video': video}))
+    if video.hoster == "image":
+        t = get_template('videos/video_image.html')
         return t.render(Context({'video': video}))
 
 

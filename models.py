@@ -17,7 +17,7 @@ class VideoTags(TagField):
 
 
 class Video (models.Model):
-    url = models.URLField(max_length=255, verbose_name=(u"URL видео"))
+    url = models.URLField(max_length=255, verbose_name=(u"URL видео"), blank=True)
     video_id = models.CharField(max_length=255, verbose_name=(u"ID видео"), blank=True)
     hoster = models.CharField(max_length=255, verbose_name=(u"Адрес хостинга"), blank=True)
     player = models.CharField(max_length=255, verbose_name=(u"Ссылка плеера"), blank=True)
@@ -60,9 +60,13 @@ class Video (models.Model):
     def save(self, *args, **kwargs):
         from urlparse import urlparse
         import re
-        url = urlparse(self.url)
-        if not self.hoster:
-            self.hoster = url.netloc
+
+        if not self.url and self.thumb:
+            self.hoster = 'image'
+        else:
+            url = urlparse(self.url)
+            if not self.hoster:
+                self.hoster = url.netloc
 
         if not self.video_id:
             if self.hoster == 'xhamster.com':
@@ -97,6 +101,8 @@ class Video (models.Model):
             if self.hoster == 'www.eroprofile.com':
                 p = re.compile('/m/videos/view/(?P<name>[0-9a-zA-Z-_\. ]+)$')
                 self.name = p.search(url.path).group("name").replace('-', ' ')
+            if self.hoster == 'image':
+                self.name = self.thumb.url.split('/')[-1]
 
         if not self.thumb or not self.name:
             if self.hoster == 'vk.com':
