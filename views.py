@@ -7,18 +7,49 @@ from django.shortcuts import get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator
-from tagging.models import TaggedItem
+from tagging.models import TaggedItem, Tag
 import json
 from django.views.decorators.cache import cache_page
+import random
+from videoblog.forms import FeedbackForm
+from django.core.urlresolvers import reverse
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
+def feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('feedback_ok'))
+    else:
+        form = FeedbackForm(initial={'ip': get_client_ip(request)})
+
+    return render_to_response('feedback.html', locals(), RequestContext(request))
+
+
+@cache_page(60 * 60)
+def tagslist(request):
+    tags = Tag.objects.usage_for_model(Video, counts=True)
+    return render_to_response('tagslist.html', locals(), RequestContext(request))
 
 
 @cache_page(60 * 60)
 def videolist(request, cur_page=1, month=None, tag=None):
+    r = random.randint(1, 4)
     if month > 0:
         paginator = Paginator(Video.objects.filter(date__month=month), 10)
     else:
         paginator = Paginator(Video.objects.all(), 10)
-    if tag != None:
+    if tag is not None:
         paginator = Paginator(TaggedItem.objects.get_by_model(Video.objects.all(), tag + ','), 10)
     curpage = paginator.page(cur_page)
     videos = curpage.object_list
@@ -88,6 +119,12 @@ def delete_video(request, id):
     except MultiValueDictKeyError:
         backurl = '/'
     return HttpResponseRedirect(backurl)
+
+
+def random_video(request):
+    random_video = Video.objects.all().order_by('?')[0]
+    return HttpResponseRedirect(random_video.get_absolute_url())
+
 
 
 @user_passes_test(lambda u: u.has_perm('video.can_change'))

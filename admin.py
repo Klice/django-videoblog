@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 # from django.db import models
 from django.contrib import admin
-from videoblog.models import Video, ViewStats, VideoTags
+from videoblog.models import Video, ViewStats, VideoTags, Feedback
 from tagging_autocomplete.widgets import TagAutocomplete
 # from django.forms import TextInput
+
+
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__', 'ip', 'email', 'date')
 
 
 class ViewStatsAdmin(admin.ModelAdmin):
@@ -24,5 +28,6 @@ class VideoAdmin(admin.ModelAdmin):
     # }
 
 
+admin.site.register(Feedback, FeedbackAdmin)
 admin.site.register(Video, VideoAdmin)
 admin.site.register(ViewStats, ViewStatsAdmin)

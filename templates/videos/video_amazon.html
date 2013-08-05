@@ -1,4 +1,44 @@
-<script type="text/javascript">
+<script type="text/javascript" src="http://ads.exoclick.com/invideo.js"></script>
+
+<div id="embedFlashPlayer"></div>
+<script src="/media/js/jwplayer.js"></script>
+<script>
+
+
+function checkVideo()
+{
+if(!!document.createElement('video').canPlayType)
+  {
+  var vidTest=document.createElement("video");
+  oggTest=vidTest.canPlayType('video/ogg; codecs="theora, vorbis"');
+  if (!oggTest)
+    {
+    h264Test=vidTest.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+    if (!h264Test)
+      {
+      return false;
+      }
+    else
+      {
+      if (h264Test=="probably")
+        {
+        return true;
+        } else {
+        return true;
+        }
+      }
+    } else{
+    if (oggTest=="probably") {
+        return true;
+      } else {
+        return true;
+      }
+    }
+  } else {
+   return false;
+  }
+}
+
 var exoOpts = {
   cat: '137',
   login: 'Klice',
@@ -9,16 +49,11 @@ var exoOpts = {
   postroll: {},
   show_thumb: '1'
 };
-</script>
-<script type="text/javascript" src="http://ads.exoclick.com/invideo.js"></script>
 
-<div id="embedFlashPlayer"></div>
-<script src="/media/js/jwplayer.js"></script>
-<script>
 jwplayer ('embedFlashPlayer').setup ({
 	id:'moviePlayer',
 	flashplayer: "/media/swf/player.swf",
-	width:590,
+	width:580,
 	height:443,
 	title: '{{ video.name }}',
 	file:'{{video.get_video_url}}',
@@ -35,6 +70,7 @@ var params = {
 	ignore_swfobject: '1'
 };
 </script>
+
 
 <meta itemprop="thumbnailUrl" content="http://candybox.peegirl.info/preview/{{ video.video_id }}.jpg"/>
 <meta property="og:title" content="{{video.name}}" />

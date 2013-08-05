@@ -10,7 +10,7 @@
                         <div class="month-data">
                             <div class="collapsed">►&nbsp;</div>
                             <div class="expanded" style="display:none;">▼&nbsp;</div>
-                            <a href="{% url video_list_archive month=videos.date.month %}" class="name">{{videos.date|date:"F"}}</a>
+                            <a href="{% url "video_list_archive" month=videos.date.month %}" class="name">{{videos.date|date:"F"}}</a>
                             <span class="counter"> ({{videos.count}})</span>
                         </div>
                     </li>

@@ -15,7 +15,6 @@
 {% paginator month=month cur_page=curpage pages=paginator tag=tag%}
 
 <ul class="videolist">
-
 {% for video in videos %} 
 <li class="videoitem" itemscope itemtype="http://schema.org/VideoObject">
 	<time itemprop="uploadDate" class="date" datetime="{{ video.date|date:"c" }}">{{ video.date|date:"j M Y" }}</time>
@@ -34,16 +33,24 @@
 	{% tags_for_object video as tags %}
 	<ul class="tags_list">
 	    {% for tag in tags %}
-	        <li class="tag"><a href="{% url tag_list tag=tag.name %}">{{tag.name}}</a></li>
+	        <li class="tag"><a href="{% url 'tag_list' tag=tag.name %}">{{tag.name}}</a></li>
 	    {% endfor %}
 	</ul>
 	<p itemprop="interactionCount" class="views">Просмотров: {{video.views}}</p>
 	<br/>
 	<a href="{{video.get_absolute_url}}">смотреть онлайн...</a>
 	{% if perms.video.can_delete %}
-	<a style="float: right" href="{% url delete_video id=video.pk %}?backurl={{request.path}}">удалить</a>
+	<a style="float: right" href="{% url 'delete_video' id=video.pk %}?backurl={{request.path}}">удалить</a>
 	{% endif %}
 </li>
+{% if forloop.counter == r %}
+<li class="videoitem">
+	<div class="notitle">&nbsp;</div>
+
+<script id="runetbcdcae56d377e3285f96960a27131b36" type="text/javascript">(function(d, s, id, uid) {function dLoad() {var js, rjs = d.getElementById(uid);if (d.getElementById(id)) id=id+Math.random();var dv = d.createElement("div");dv.id = "bcdcae56d377e3285f96960a27131b36";rjs.parentNode.insertBefore(dv , rjs);js = d.createElement(s); js.id = id;js.src = "//tools.runetki.com/din.php?src=bcdcae56d377e3285f96960a27131b36&bg=none&w=640&h=300";rjs.parentNode.insertBefore(js, rjs);}if (window.addEventListener) {window.addEventListener("load", dLoad, false);} else if (window.attachEvent) {window.attachEvent("onload",dLoad);}}(document, "script", "rundin","runetbcdcae56d377e3285f96960a27131b36"));</script>
+
+</li>
+{%endif%}
 {% endfor %} 
 
 </ul>

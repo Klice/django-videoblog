@@ -12,6 +12,21 @@ from tagging.fields import TagField
 from django.core.cache import cache
 
 
+class Feedback(models.Model):
+    ip = models.IPAddressField(verbose_name=(u"IP адрес"))
+    name = models.CharField(max_length=255, verbose_name=(u"Имя"), blank=True)
+    email = models.EmailField(verbose_name=(u"E-mail"), blank=True)
+    text = models.CharField(verbose_name=(u"Сообщение"), max_length=1024)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = u'Отзывы'
+        verbose_name_plural = u'Отзывы'
+
+    def __unicode__(self):
+        return "%s" % (self.name)
+
+
 class VideoTags(TagField):
     pass
 

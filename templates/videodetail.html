@@ -27,9 +27,9 @@
 				e.preventDefault();
 				var url;
 				if ($(this).data('res') == 'good') {
-					url = '{% url video_vote_good id=video.pk %}';
+					url = '{% url "video_vote_good" id=video.pk %}';
 				} else {
-					url = '{% url video_vote_bad id=video.pk %}';
+					url = '{% url "video_vote_bad" id=video.pk %}';
 				}
 
 				$.ajax({
@@ -47,15 +47,17 @@
 
 {% showvideo video %}
 {% tags_for_object video as tags %}
+<p style="float:right; margin-top: 10px;">{{ video.views }} {{ video.views|rupluralize:'просмотр,просмотра,просмотров' }}</p>
 <ul class="tags_list">
     {% for tag in tags %}
-        <li class="tag"><a href="{% url tag_list tag=tag.name %}">{{tag.name}}</a></li>
+        <li class="tag"><a href="{% url "tag_list" tag=tag.name %}">{{tag.name}}</a></li>
     {% endfor %}
 </ul>
+<a style="font-size: 18px;" href="{% url "random"%}">Случайное видео &rarr;</a>
 <p itemprop="description" id="video_decription" class="video_decription">{{video.desc}}</p>	
 
 <!-- AddThis Button BEGIN -->
-<div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+<div class="addthis_toolbox addthis_default_style addthis_32x32_style" style="overflow: hidden;">
 <a class="addthis_button_preferred_1"></a>
 <a class="addthis_button_preferred_2"></a>
 <a class="addthis_button_preferred_3"></a>
@@ -82,7 +84,7 @@
 					e.stopPropagation();
 					desc.removeClass('editable');
 					text = $('<textarea/>', {text: desc.text()});
-					link = $('<a/>', {href: '{% url edit_video_desc id=video.pk %}', text: 'Сохранить'})
+					link = $('<a/>', {href: '{% url "edit_video_desc" id=video.pk %}', text: 'Сохранить'})
 					desc.html(text).append(link);
 					text.focus();
 					text.mouse_is_inside = false;
@@ -104,7 +106,7 @@
 {% endif %}
 
 {% if perms.video.can_delete %}
-	<br><a href="{% url delete_video id=video.pk %}?backurl={{request.path}}">удалить</a>
+	<br><a href="{% url "delete_video" id=video.pk %}?backurl={{request.path}}">удалить</a>
 {% endif %}
 <br><br>
 </div>

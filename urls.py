@@ -1,4 +1,5 @@
 from django.conf.urls import patterns
+from django.views.generic import TemplateView
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
@@ -17,7 +18,14 @@ urlpatterns = patterns('',
 
     (r'tag/(?P<tag>[\w ^/]+)/$', 'videoblog.views.videolist', {}, 'tag_list'),
 
+    (r'tags/$', 'videoblog.views.tagslist', {}, 'tags_list'),
+
     (r'archive/(?P<month>\d+)/(?P<cur_page>\d+)/$',  'videoblog.views.videolist', {'tag': None}, 'video_list_page'),
     (r'tag/(?P<tag>[\w ^/]+)/page-(?P<cur_page>\d+)/$', 'videoblog.views.videolist', {'month': None}, 'video_list_page'),
     (r'page/(?P<cur_page>\d+)/$', 'videoblog.views.videolist', {'tag': None, 'month': None}, 'video_list_page'),
+
+    (r'feedback/$', 'videoblog.views.feedback', {}, 'feedback'),
+    (r'feedback/ok/$', TemplateView.as_view(template_name="feedback_ok.html"), {}, 'feedback_ok'),
+    (r'random/$', 'videoblog.views.random_video', {}, 'random'),
+    
 )
