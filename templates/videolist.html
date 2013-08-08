@@ -5,49 +5,42 @@
 {% block header %}
 {% if not curpage.number == 1 %}Страница: {{curpage.number}}
 {% elif tag %}{{tag}}
-{%else%}Коллекция бесплатного порно-видео с писающими девушками{%endif%}
+{%else%}Частная коллекция порно-видео с писающими девушками{%endif%}
 {% endblock %} 
 
 {% block content %} 
 
 {% load tags %}
 
-{% paginator month=month cur_page=curpage pages=paginator tag=tag%}
-
 <ul class="videolist">
 {% for video in videos %} 
 <li class="videoitem" itemscope itemtype="http://schema.org/VideoObject">
-	<time itemprop="uploadDate" class="date" datetime="{{ video.date|date:"c" }}">{{ video.date|date:"j M Y" }}</time>
-	{%if video.hoster != 'image' %}
+	<p class="time_wrp"><abbr><time itemprop="uploadDate" class="date" datetime="{{ video.date|date:"c" }}">{{ video.date|date:"j M Y" }}</time>&nbsp;|&nbsp;<span itemprop="interactionCount" class="views">{{video.views}} {{ video.views|rupluralize:'просмотр,просмотра,просмотров' }} </span></abbr></p>
+	{%if video.url %}
 	<meta itemprop="url" content="http://{{request.META.SERVER_NAME}}{{video.get_absolute_url}}">
 	<meta itemprop="playerType" content="Flash"/>
 	<h2><a itemprop="name" class="videotitle" href="{{video.get_absolute_url}}">{{video.name}}</a></h2>
 	{%else%}
 	<div class="notitle">&nbsp;</div>
 	{%endif%}
+	<div class="video_tmb_wrp">
+	{% showvideo_preview video %}
 	<div class="rating_box" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
 		<div class="rating {% if video.rating < 0 %} rating_red {%else%} rating_green {%endif%}" itemprop="ratingValue">{{ video.rating }}</div>
-		<p class="voters_total"><span itemprop="ratingCount">{{ video.voters }}</span> {{ video.voters|rupluralize:'голос,голоса,голосов' }}</p>
 	</div>
-	{% showvideo_preview video %}
+	</div>
 	{% tags_for_object video as tags %}
 	<ul class="tags_list">
 	    {% for tag in tags %}
 	        <li class="tag"><a href="{% url 'tag_list' tag=tag.name %}">{{tag.name}}</a></li>
 	    {% endfor %}
 	</ul>
-	<p itemprop="interactionCount" class="views">Просмотров: {{video.views}}</p>
-	<br/>
-	<a href="{{video.get_absolute_url}}">смотреть онлайн...</a>
-	{% if perms.video.can_delete %}
-	<a style="float: right" href="{% url 'delete_video' id=video.pk %}?backurl={{request.path}}">удалить</a>
-	{% endif %}
 </li>
 {% if forloop.counter == r %}
 <li class="videoitem">
 	<div class="notitle">&nbsp;</div>
 
-<script id="runetbcdcae56d377e3285f96960a27131b36" type="text/javascript">(function(d, s, id, uid) {function dLoad() {var js, rjs = d.getElementById(uid);if (d.getElementById(id)) id=id+Math.random();var dv = d.createElement("div");dv.id = "bcdcae56d377e3285f96960a27131b36";rjs.parentNode.insertBefore(dv , rjs);js = d.createElement(s); js.id = id;js.src = "//tools.runetki.com/din.php?src=bcdcae56d377e3285f96960a27131b36&bg=none&w=640&h=300";rjs.parentNode.insertBefore(js, rjs);}if (window.addEventListener) {window.addEventListener("load", dLoad, false);} else if (window.attachEvent) {window.attachEvent("onload",dLoad);}}(document, "script", "rundin","runetbcdcae56d377e3285f96960a27131b36"));</script>
+<script id="runet42f8c2aa6699b0a32af74d27b95a5b17" type="text/javascript">(function(d, s, id, uid) {function dLoad() {var js, rjs = d.getElementById(uid);if (d.getElementById(id)) id=id+Math.random();var dv = d.createElement("div");dv.id = "42f8c2aa6699b0a32af74d27b95a5b17";rjs.parentNode.insertBefore(dv , rjs);js = d.createElement(s); js.id = id;js.src = "//tools.runetki.com/din.php?src=42f8c2aa6699b0a32af74d27b95a5b17&bg=none&w=500&h=300";rjs.parentNode.insertBefore(js, rjs);}if (window.addEventListener) {window.addEventListener("load", dLoad, false);} else if (window.attachEvent) {window.attachEvent("onload",dLoad);}}(document, "script", "rundin","runet42f8c2aa6699b0a32af74d27b95a5b17"));</script>
 
 </li>
 {%endif%}
