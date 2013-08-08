@@ -1,0 +1,23 @@
+{% extends "base.html" %} 
+
+{% block header %}Напиши все что ты думаешь{% endblock %} 
+
+{% block content %} 
+
+<form style="text-align: center;" action="{% url "feedback" %}" method="post">{% csrf_token %}
+{% for hidden in form.hidden_fields %}
+{{ hidden }}
+{% endfor %}
+{{form.text}}
+<br><br>
+<p style="text-align: center;">Представся, если хочешь</p><br>
+<label>Имя</label>: {{form.name}}<br>
+<label>Почта</label>: {{form.email}}<br>
+<br>
+<input type="submit" value="Отправить" />
+</form>
+
+{% endblock %} 
+
+
+

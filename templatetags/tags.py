@@ -36,30 +36,26 @@ def video_top():
 
 @register.simple_tag
 def showvideo_preview(video):
+    t = get_template('videos/preview_images.html')
     if video.hoster == "xhamster.com":
         t = get_template('videos/preview_xhamster.html')
-        return t.render(Context({'video': video}))
     if video.hoster == "www.empflix.com":
         t = get_template('videos/preview_empflix.html')
-        return t.render(Context({'video': video}))
     if video.hoster == "www.tube8.com":
         t = get_template('videos/preview_tube8.html')
-        return t.render(Context({'video': video}))
     if video.hoster == "vk.com":
         t = get_template('videos/preview_vk.html')
-        return t.render(Context({'video': video}))
     if video.hoster == "www.xvideos.com":
         t = get_template('videos/preview_xvideos.html')
-        return t.render(Context({'video': video}))
     if video.hoster == "www.eroprofile.com":
         t = get_template('videos/preview_eroprofile.html')
-        return t.render(Context({'video': video}))
     if video.hoster == "amazon":
         t = get_template('videos/preview_amazon.html')
-        return t.render(Context({'video': video}))
     if video.hoster == "image":
         t = get_template('videos/preview_image.html')
-        return t.render(Context({'video': video}))
+
+    return t.render(Context({'video': video}))
+    
 
 @cache_page(60 * 60)
 @register.simple_tag
@@ -112,7 +108,8 @@ def showvideo(video):
     if video.hoster == "image":
         t = get_template('videos/video_image.html')
         return t.render(Context({'video': video}))
-
+    t = get_template('videos/video_images.html')
+    return t.render(Context({'video': video}))
 
 @register.simple_tag
 def archive():

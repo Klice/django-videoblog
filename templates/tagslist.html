@@ -1,0 +1,22 @@
+{% extends "base.html" %} 
+
+{% block header %}
+Тэги
+{% endblock %} 
+
+{% block content %} 
+
+{% load tags %}
+
+
+<ul class="tagslist">
+
+{% for tag in tags %} 
+<li>
+	<a href="{% url "tag_list" tag=tag.name %}">{{tag.name}} ({{tag.count}})</a>
+</li>
+{% endfor %} 
+
+</ul>
+
+{% endblock %} 

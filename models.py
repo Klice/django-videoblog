@@ -257,6 +257,11 @@ class Video (models.Model):
 
 # tagging.register(Video)
 
+class Images(models.Model):
+    image = models.ImageField(upload_to='images/', verbose_name=(u"Картинка"), blank=True)
+    post = models.ForeignKey(Video, related_name='img') 
+
+
 
 class ViewStats(models.Model):
     video_from = models.ForeignKey(Video, related_name='next_videos', verbose_name=(u"Видео с которого перешли"))

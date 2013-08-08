@@ -1,6 +1,7 @@
 from django.conf.urls import patterns
 from django.views.generic import TemplateView
 from django.conf.urls.defaults import *
+from videoblog.feeds import LatestEntriesFeed
 
 urlpatterns = patterns('',
     (r'add_video_url/$', 'videoblog.views.Add_Video_URL'),
@@ -27,5 +28,6 @@ urlpatterns = patterns('',
     (r'feedback/$', 'videoblog.views.feedback', {}, 'feedback'),
     (r'feedback/ok/$', TemplateView.as_view(template_name="feedback_ok.html"), {}, 'feedback_ok'),
     (r'random/$', 'videoblog.views.random_video', {}, 'random'),
+    (r'rss/$', LatestEntriesFeed(),{},'rss'),
     
 )
