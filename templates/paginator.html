@@ -1,4 +1,5 @@
-Страницы:
+{% load i18n %}
+{% trans "Pages" %}:
 <div class="paginator">
 	<ul class="pages">
 	{% for page in pages.page_range %}
@@ -7,10 +8,10 @@
 	</ul>
 	<div class="nav_arr">
 	{% if cur_page.has_previous %}
-		<a class="nav_prev" href="{% url "video_list_page" tag=tag month=month cur_page=cur_page.previous_page_number %}">&larr; сюда</a>
+		<a class="nav_prev" href="{% url "video_list_page" tag=tag month=month cur_page=cur_page.previous_page_number %}">&larr; {% trans "Pages_Prev" %}</a>
 	{% endif %}
 	{% if cur_page.has_next %}
-		<a class="nav_next" href="{% url "video_list_page" tag=tag month=month cur_page=cur_page.next_page_number %}">туда &rarr;</a>
+		<a class="nav_next" href="{% url "video_list_page" tag=tag month=month cur_page=cur_page.next_page_number %}">{% trans "Pages_Next" %} &rarr;</a>
 	{% endif %}
 	</div>
 </div>

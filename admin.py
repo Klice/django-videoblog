@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # from django.db import models
 from django.contrib import admin
-from videoblog.models import Video, ViewStats, VideoTags, Feedback, Images
+from apps.videoblog.models import Video, ViewStats, VideoTags, Feedback, Images
 from tagging_autocomplete.widgets import TagAutocomplete
 # from django.forms import TextInput
 
@@ -22,7 +22,7 @@ class VideoAdmin(admin.ModelAdmin):
         VideoTags: {'widget': TagAutocomplete}
     }
     date_hierarchy = 'date'
-    list_filter = ('hoster',)
+    list_filter = ('hoster','sites')
     search_fields = ['name', 'desc']
     list_display = ('name', 'hoster', 'tags')
     inlines = [

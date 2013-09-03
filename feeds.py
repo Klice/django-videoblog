@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.syndication.views import Feed
-from videoblog.models import Video
+from apps.videoblog.models import Video
 
 
 class LatestEntriesFeed(Feed):

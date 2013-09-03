@@ -1,0 +1,34 @@
+<script type="text/javascript" src="http://ads.exoclick.com/invideo.js"></script>
+
+
+
+<div id="embedFlashPlayer"></div>
+<script src="/media/js/jwplayer.js"></script>
+<script>
+
+jwplayer ('embedFlashPlayer').setup ({
+	id:'moviePlayer',
+	flashplayer: "/media/swf/player.swf",
+	width:500,
+	height:400,
+	title: '{{ video.name }}',
+	file:'{{video.url}}',
+	image:'{{ video.thumb_external }}',
+	stretching:'uniform',
+	abouttext:'InPornWeTrust',
+	'http.start':'start'
+});
+
+var params = {
+	'wmode': 'transparent',
+	ignore_swfobject: '1'
+};
+</script>
+
+
+<meta itemprop="thumbnailUrl" content="{{ video.thumb_external }}"/>
+<meta property="og:title" content="{{video.name}}" />
+<meta property="og:description" content="{{video.desc}}" />
+<meta property="og:image" content="{{ video.thumb_external }}" />   
+<meta property="og:video:width" content="640" />    
+<meta property="og:video:height" content="480" />

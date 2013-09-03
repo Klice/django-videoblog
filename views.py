@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect
-from videoblog.models import *
+from apps.videoblog.models import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404
@@ -11,9 +11,9 @@ from tagging.models import TaggedItem, Tag
 import json
 from django.views.decorators.cache import cache_page
 import random
-from videoblog.forms import FeedbackForm
+from apps.videoblog.forms import FeedbackForm
 from django.core.urlresolvers import reverse
-
+from django.contrib.sites.models import get_current_site
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -38,19 +38,19 @@ def feedback(request):
 
 @cache_page(60 * 60)
 def tagslist(request):
-    tags = Tag.objects.usage_for_model(Video, counts=True)
+    tags = Tag.objects.usage_for_model(Video, counts=True, filters=dict(sites__id__exact=get_current_site(request).id))
     return render_to_response('tagslist.html', locals(), RequestContext(request))
 
 
 @cache_page(60 * 60)
 def videolist(request, cur_page=1, month=None, tag=None):
-    r = random.randint(1, 4)
+    r = random.randint(1, 3)
     if month > 0:
-        paginator = Paginator(Video.objects.filter(date__month=month), 10)
+        paginator = Paginator(Video.objects.filter(date__month=month, sites__id__exact=get_current_site(request).id), 10)
     else:
-        paginator = Paginator(Video.objects.all(), 10)
+        paginator = Paginator(Video.objects.filter(sites__id__exact=get_current_site(request).id), 10)
     if tag is not None:
-        paginator = Paginator(TaggedItem.objects.get_by_model(Video.objects.all(), tag + ','), 10)
+        paginator = Paginator(TaggedItem.objects.get_by_model(Video.objects.filter(sites__id__exact=get_current_site(request).id), tag + ','), 10)
     curpage = paginator.page(cur_page)
     videos = curpage.object_list
     return render_to_response('videolist.html', locals(), RequestContext(request))
@@ -101,7 +101,7 @@ def detail_video(request, video_id, name):
         video.add_view()
     if last_view:
         if last_view != video:
-            viewstat, created = ViewStats.objects.get_or_create(video_from=last_view, video_to=video)
+            viewstat, created = ViewStats.objects.get_or_create(video_from=last_view, video_to=video, site=get_current_site(request))
             viewstat.views += 1
             viewstat.save()
     # raise ValueError
@@ -122,7 +122,7 @@ def delete_video(request, id):
 
 
 def random_video(request):
-    random_video = Video.objects.all().order_by('?')[0]
+    random_video = Video.objects.filter(sites__id__exact=get_current_site(request).id).order_by('?')[0]
     return HttpResponseRedirect(random_video.get_absolute_url())
 
 

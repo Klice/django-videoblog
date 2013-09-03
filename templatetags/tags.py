@@ -2,10 +2,12 @@
 from django import template
 from django.template.loader import get_template
 from django.template import Context
-from videoblog.models import Video
+from apps.videoblog.models import Video
 import datetime
 import itertools
 from django.views.decorators.cache import cache_page
+from django.contrib.sites.models import Site
+
 
 register = template.Library()
 
@@ -53,6 +55,8 @@ def showvideo_preview(video):
         t = get_template('videos/preview_amazon.html')
     if video.hoster == "image":
         t = get_template('videos/preview_image.html')
+    if video.hoster == "payserve":
+        t = get_template('videos/preview_payserve.html')
 
     return t.render(Context({'video': video}))
     
@@ -68,7 +72,7 @@ def showrel(video, num=5):
     videos = Video.objects.in_bulk(video_list)
     if len(videos) < num:
         num_add = num - len(videos)
-        rnd = Video.objects.all().order_by('?')[:num_add]
+        rnd = Video.objects.filter(sites__id__exact=Site.objects.get_current().id).order_by('?')[:num_add]
     else:
         rnd = []
     result = []
@@ -104,6 +108,9 @@ def showvideo(video):
         return t.render(Context({'video': video}))
     if video.hoster == "amazon":
         t = get_template('videos/video_amazon.html')
+        return t.render(Context({'video': video}))
+    if video.hoster == "payserve":
+        t = get_template('videos/video_payserve.html')
         return t.render(Context({'video': video}))
     if video.hoster == "image":
         t = get_template('videos/video_image.html')

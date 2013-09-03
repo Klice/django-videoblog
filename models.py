@@ -10,7 +10,7 @@ import operator
 from django.contrib.sitemaps import ping_google
 from tagging.fields import TagField
 from django.core.cache import cache
-
+from django.contrib.sites.models import Site
 
 class Feedback(models.Model):
     ip = models.IPAddressField(verbose_name=(u"IP адрес"))
@@ -33,6 +33,9 @@ class VideoTags(TagField):
 
 class Video (models.Model):
     url = models.URLField(max_length=255, verbose_name=(u"URL видео"), blank=True)
+    thumb_external = models.URLField(max_length=255, verbose_name=(u"URL превью"), blank=True)
+    lenght = models.IntegerField(verbose_name=(u"Длительность"), default=0)
+    pay_url = models.URLField(max_length=255, verbose_name=(u"URL на платник"), blank=True)
     video_id = models.CharField(max_length=255, verbose_name=(u"ID видео"), blank=True)
     hoster = models.CharField(max_length=255, verbose_name=(u"Адрес хостинга"), blank=True)
     player = models.CharField(max_length=255, verbose_name=(u"Ссылка плеера"), blank=True)
@@ -45,6 +48,7 @@ class Video (models.Model):
     voters_bad = models.IntegerField(verbose_name=(u"Количество проголосовавших 'против'"), default=0)
     voters_good = models.IntegerField(verbose_name=(u"Количество проголосовавших 'за'"), default=0)
     tags = VideoTags(verbose_name=(u"Тэги"))
+    sites = models.ManyToManyField(Site, verbose_name=(u"Сайты"))
 
     def rating(self):
         return self.voters_good - self.voters_bad
@@ -232,7 +236,7 @@ class Video (models.Model):
                 self.thumb.save(self.video_id + '.jpeg', File(img_temp))
 
         super(Video, self).save(*args, **kwargs)
-        cache._cache.flush_all()
+        # cache._cache.flush_all()
         try:
             ping_google()
         except Exception:
@@ -267,6 +271,7 @@ class ViewStats(models.Model):
     video_from = models.ForeignKey(Video, related_name='next_videos', verbose_name=(u"Видео с которого перешли"))
     video_to = models.ForeignKey(Video, related_name='+', verbose_name=(u"Видео на которое перешли"))
     views = models.IntegerField(verbose_name=(u"Количество переходов"), default=0)
+    site = models.ForeignKey(Site)
 
     class Meta:
         verbose_name = 'ViewStats'

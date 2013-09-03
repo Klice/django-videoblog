@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm, Textarea, HiddenInput
-from videoblog.models import Feedback
+from apps.videoblog.models import Feedback
 
 
 class FeedbackForm(ModelForm):
