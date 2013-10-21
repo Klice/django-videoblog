@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-03 04:58+0200\n"
+"POT-Creation-Date: 2013-09-03 08:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,6 +50,10 @@ msgstr "просмотр,просмотра,просмотров"
 #: templates/videodetail.html:61
 msgid "Random Video"
 msgstr "Случайное видео"
+
+#: templates/videodetail.html:118
+msgid "related_video"
+msgstr "С этим видео так же посмотрели"
 
 #: templates/videolist.html:7
 msgid "Page"

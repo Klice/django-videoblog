@@ -7,7 +7,7 @@ import datetime
 import itertools
 from django.views.decorators.cache import cache_page
 from django.contrib.sites.models import Site
-
+from django.db.models import Q
 
 register = template.Library()
 
@@ -31,7 +31,7 @@ def rupluralize(value, arg=u"дурак,дурака,дураков"):
 
 @register.simple_tag
 def video_top():
-    vlist = Video.objects.extra(select={'r': 'voters_good - voters_bad'}).order_by('-r', '-views')[:10]
+    vlist = Video.on_site.extra(select={'r': 'voters_good - voters_bad'}).order_by('-r', '-views')[:10]
     t = get_template('video_top_left.html')
     return t.render(Context({'videos': vlist}))
 
@@ -57,7 +57,8 @@ def showvideo_preview(video):
         t = get_template('videos/preview_image.html')
     if video.hoster == "payserve":
         t = get_template('videos/preview_payserve.html')
-
+    if video.hoster == "text":
+        t = get_template('videos/video_text.html')
     return t.render(Context({'video': video}))
     
 
@@ -69,10 +70,10 @@ def showrel(video, num=5):
     video_list = []
     for vid in top.keys():
         video_list.append(vid)
-    videos = Video.objects.in_bulk(video_list)
+    videos = Video.on_site.in_bulk(video_list)
     if len(videos) < num:
         num_add = num - len(videos)
-        rnd = Video.objects.filter(sites__id__exact=Site.objects.get_current().id).order_by('?')[:num_add]
+        rnd = Video.on_site.filter(~Q(hoster='text')).order_by('?')[:num_add]
     else:
         rnd = []
     result = []
@@ -115,6 +116,9 @@ def showvideo(video):
     if video.hoster == "image":
         t = get_template('videos/video_image.html')
         return t.render(Context({'video': video}))
+    if video.hoster == "text":
+        t = get_template('videos/video_text.html')
+        return t.render(Context({'video': video}))        
     t = get_template('videos/video_images.html')
     return t.render(Context({'video': video}))
 

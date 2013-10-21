@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.syndication.views import Feed
 from apps.videoblog.models import Video
+from django.db.models import Q
 
 
 class LatestEntriesFeed(Feed):
@@ -9,7 +10,7 @@ class LatestEntriesFeed(Feed):
     description = "Новые видео и фото"
 
     def items(self):
-        return Video.objects.order_by('-date')[:20]
+        return Video.on_site.filter(~Q(name='')&~Q(hoster='text')).order_by('-date')[:20]
 
     def item_title(self, item):
         return item.name

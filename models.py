@@ -9,8 +9,9 @@ from django.db.models import Q
 import operator
 from django.contrib.sitemaps import ping_google
 from tagging.fields import TagField
-from django.core.cache import cache
+# from django.core.cache import cache
 from django.contrib.sites.models import Site
+from django.contrib.sites.managers import CurrentSiteManager
 
 class Feedback(models.Model):
     ip = models.IPAddressField(verbose_name=(u"IP адрес"))
@@ -49,6 +50,9 @@ class Video (models.Model):
     voters_good = models.IntegerField(verbose_name=(u"Количество проголосовавших 'за'"), default=0)
     tags = VideoTags(verbose_name=(u"Тэги"))
     sites = models.ManyToManyField(Site, verbose_name=(u"Сайты"))
+    has_vote = models.BooleanField(verbose_name=(u"Участвует в голосовании"), default=True)
+    objects = models.Manager()
+    on_site = CurrentSiteManager('sites')
 
     def rating(self):
         return self.voters_good - self.voters_bad

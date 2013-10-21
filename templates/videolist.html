@@ -24,9 +24,11 @@
 	{%endif%}
 	<div class="video_tmb_wrp">
 	{% showvideo_preview video %}
+	{% if video.has_vote %}
 	<div class="rating_box" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
 		<div class="rating {% if video.rating < 0 %} rating_red {%else%} rating_green {%endif%}" itemprop="ratingValue">{{ video.rating }}</div>
 	</div>
+	{% endif %}
 	</div>
 	{% tags_for_object video as tags %}
 	<ul class="tags_list">
