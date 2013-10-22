@@ -36,13 +36,13 @@ def feedback(request):
     return render_to_response('feedback.html', locals(), RequestContext(request))
 
 
-@cache_page(60 * 60)
+@cache_page(10 * 60 * 60)
 def tagslist(request):
     tags = Tag.objects.usage_for_model(Video, counts=True, filters=dict(sites__id__exact=get_current_site(request).id))
     return render_to_response('tagslist.html', locals(), RequestContext(request))
 
 
-@cache_page(60 * 60)
+@cache_page(3 * 60 * 60)
 def videolist(request, cur_page=1, month=None, tag=None):
     r = random.randint(1, 3)
     if month > 0:
@@ -50,8 +50,10 @@ def videolist(request, cur_page=1, month=None, tag=None):
     else:
         paginator = Paginator(Video.on_site.all(), 10)
     if tag is not None:
+        # f = TaggedItem.objects.get_by_model(Video.on_site.all(), list(tag))
         paginator = Paginator(TaggedItem.objects.get_by_model(Video.on_site.all(), tag + ','), 10)
     curpage = paginator.page(cur_page)
+    # raise ValueError
     videos = curpage.object_list
     return render_to_response('videolist.html', locals(), RequestContext(request))
 
@@ -89,18 +91,23 @@ def Add_Video_Amazon_URL(request):
             pass
     return HttpResponse(status=400)
 
-
+@cache_page(3 * 60 * 60)
 def detail_video(request, video_id, name):
     video = get_object_or_404(Video, pk=video_id)
+    return render_to_response('videodetail.html', locals(),  RequestContext(request))
+
+def video_count(request, video_id):
     user_viewed = request.session.get('video_viewed')
     last_view = request.session.get('last_view')
     if not user_viewed:
         user_viewed = []
     if not video_id in user_viewed:
         user_viewed.append(video_id)
+        video = get_object_or_404(Video, pk=video_id)
         video.add_view()
     if last_view:
-        if last_view != video:
+        if last_view.pk != video_id:
+            video = get_object_or_404(Video, pk=video_id)
             try:
                 viewstat, created = ViewStats.objects.get_or_create(video_from=last_view, video_to=video, site=get_current_site(request))
             except ViewStats.MultipleObjectsReturned:
@@ -112,8 +119,7 @@ def detail_video(request, video_id, name):
     # raise ValueError
     request.session['last_view'] = video
     request.session['video_viewed'] = user_viewed
-
-    return render_to_response('videodetail.html', locals(),  RequestContext(request))
+    return HttpResponse("OK")
 
 
 @user_passes_test(lambda u: u.has_perm('video.can_delete'))

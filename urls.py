@@ -17,7 +17,7 @@ urlpatterns = patterns('',
 
     (r'add_amazon_url/$', 'apps.videoblog.views.Add_Video_Amazon_URL'),
 
-    (r'tag/(?P<tag>[\w ^/\-]+)/$', 'apps.videoblog.views.videolist', {}, 'tag_list'),
+    (r'tag/(?P<tag>[\w -]+)/$', 'apps.videoblog.views.videolist', {}, 'tag_list'),
 
     (r'tags/$', 'apps.videoblog.views.tagslist', {}, 'tags_list'),
 
@@ -29,5 +29,7 @@ urlpatterns = patterns('',
     (r'feedback/ok/$', TemplateView.as_view(template_name="feedback_ok.html"), {}, 'feedback_ok'),
     (r'random/$', 'apps.videoblog.views.random_video', {}, 'random'),
     (r'rss/$', LatestEntriesFeed(),{},'rss'),
+    (r'count/(?P<video_id>\d+)/$', 'apps.videoblog.views.video_count', {}, 'video_count'),
+
     
 )

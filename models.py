@@ -12,6 +12,7 @@ from tagging.fields import TagField
 # from django.core.cache import cache
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
+from django.utils import timezone
 
 class Feedback(models.Model):
     ip = models.IPAddressField(verbose_name=(u"IP адрес"))
@@ -42,7 +43,7 @@ class Video (models.Model):
     player = models.CharField(max_length=255, verbose_name=(u"Ссылка плеера"), blank=True)
     name = models.CharField(max_length=255, verbose_name=(u"Название"), blank=True)
     desc = models.TextField(verbose_name=(u"Описание"), blank=True)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(default=timezone.now)
     thumb = models.ImageField(upload_to='thumbs/', verbose_name=(u"Картинка"), blank=True)
     views = models.IntegerField(verbose_name=(u"Количество просмотров"), default=0)
     voters = models.IntegerField(verbose_name=(u"Общее количество проголосовавших"), default=0)
@@ -282,4 +283,7 @@ class ViewStats(models.Model):
         verbose_name_plural = 'ViewStatss'
 
     def __unicode__(self):
-        return "%s -> %s" % (self.video_from.pk, self.video_to.pk)
+	try:
+	    return "%s -> %s" % (self.video_from.pk, self.video_to.pk)
+	except Video.DoesNotExist:
+	    return "%s" % (self.pk)

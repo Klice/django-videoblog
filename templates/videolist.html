@@ -3,6 +3,11 @@
 
 {% load tagging_tags %}
 
+{% block title %}
+{% if tag %}{{tag}} | Peegirl.info{%else%}{{ block.super }}{%endif%}
+{% endblock %} 
+
+
 {% block header %}
 {% if not curpage.number == 1 %}{% trans "Page" %}: {{curpage.number}}{% elif tag %}{{tag}}{%else%}{{ block.super }}{%endif%}
 {% endblock %} 
@@ -14,7 +19,7 @@
 <ul class="videolist">
 {% for video in videos %} 
 <li class="videoitem" itemscope itemtype="http://schema.org/VideoObject">
-	<p class="time_wrp"><abbr><time itemprop="uploadDate" class="date" datetime="{{ video.date|date:"c" }}">{{ video.date|date:"j M Y" }}</time>&nbsp;|&nbsp;<span itemprop="interactionCount" class="views">{{video.views}} {{ video.views|rupluralize:_('просмотр,просмотра,просмотров') }} </span></abbr></p>
+	<p class="time_wrp"><abbr><time itemprop="uploadDate" class="date" datetime="{{ video.date|date:"c" }}">{{ video.date|date:"j M Y" }}</time>{% if video.views > 0 %}&nbsp;|&nbsp;<span itemprop="interactionCount" class="views">{{video.views}} {{ video.views|rupluralize:_('просмотр,просмотра,просмотров') }} </span>{%endif%}</abbr></p>
 	{%if video.url %}
 	<meta itemprop="url" content="http://{{request.META.SERVER_NAME}}{{video.get_absolute_url}}">
 	<meta itemprop="playerType" content="Flash"/>
