@@ -1,57 +1,12 @@
-<script type="text/javascript" src="http://ads.exoclick.com/invideo.js"></script>
+{% load adzone_tags %}
+
+{% random_zone_ad 'detail_local' %}
 
 
 
 <div id="embedFlashPlayer"></div>
 <script src="/media/js/jwplayer.js"></script>
 <script>
-
-
-function checkVideo()
-{
-if(!!document.createElement('video').canPlayType)
-  {
-  var vidTest=document.createElement("video");
-  oggTest=vidTest.canPlayType('video/ogg; codecs="theora, vorbis"');
-  if (!oggTest)
-    {
-    h264Test=vidTest.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
-    if (!h264Test)
-      {
-      return false;
-      }
-    else
-      {
-      if (h264Test=="probably")
-        {
-        return true;
-        } else {
-        return true;
-        }
-      }
-    } else{
-    if (oggTest=="probably") {
-        return true;
-      } else {
-        return true;
-      }
-    }
-  } else {
-   return false;
-  }
-}
-
-var exoOpts = {
-  cat: '137',
-  login: 'Klice',
-  idzone_300x250: '472521',
-  idzone_468x60: '472521',
-  idsite: '181321',
-  pause: {},
-  postroll: {},
-  show_thumb: '1'
-};
-
 jwplayer ('embedFlashPlayer').setup ({
 	id:'moviePlayer',
 	flashplayer: "/media/swf/player.swf",

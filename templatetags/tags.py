@@ -62,7 +62,7 @@ def showvideo_preview(video):
     return t.render(Context({'video': video}))
     
 
-@cache_page(60 * 60)
+# @cache_page(60 * 60)
 @register.simple_tag
 def showrel(video, num=5):
     vids = video.GetRel()

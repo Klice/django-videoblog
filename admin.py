@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # from django.db import models
 from django.contrib import admin
-from apps.videoblog.models import Video, ViewStats, VideoTags, Feedback, Images
+from apps.videoblog.models import CustomAd, Video, ViewStats, VideoTags, Feedback, Images
 from tagging_autocomplete.widgets import TagAutocomplete
 # from django.forms import TextInput
 
@@ -36,6 +36,7 @@ class VideoAdmin(admin.ModelAdmin):
 
 
 
+admin.site.register(CustomAd)
 admin.site.register(Feedback, FeedbackAdmin)
 admin.site.register(Video, VideoAdmin)
 admin.site.register(ViewStats, ViewStatsAdmin)

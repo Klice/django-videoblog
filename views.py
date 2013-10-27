@@ -91,9 +91,10 @@ def Add_Video_Amazon_URL(request):
             pass
     return HttpResponse(status=400)
 
-@cache_page(3 * 60 * 60)
+# @cache_page(3 * 60 * 60)
 def detail_video(request, video_id, name):
     video = get_object_or_404(Video, pk=video_id)
+    cache_time=10800
     return render_to_response('videodetail.html', locals(),  RequestContext(request))
 
 def video_count(request, video_id):

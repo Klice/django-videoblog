@@ -13,12 +13,13 @@ from tagging.fields import TagField
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 from django.utils import timezone
+from adzone.models import AdBase
 
 class Feedback(models.Model):
     ip = models.IPAddressField(verbose_name=(u"IP адрес"))
     name = models.CharField(max_length=255, verbose_name=(u"Имя"), blank=True)
     email = models.EmailField(verbose_name=(u"E-mail"), blank=True)
-    text = models.CharField(verbose_name=(u"Сообщение"), max_length=1024)
+    text = models.TextField(verbose_name=(u"Сообщение"))
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -287,3 +288,7 @@ class ViewStats(models.Model):
 	    return "%s -> %s" % (self.video_from.pk, self.video_to.pk)
 	except Video.DoesNotExist:
 	    return "%s" % (self.pk)
+
+class CustomAd(AdBase):
+    """ A most basic, text based advert """
+    content = models.TextField()

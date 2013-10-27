@@ -1,0 +1,19 @@
+{% comment %}
+    A instance of AdBase is passed to this tag.
+{% endcomment %}
+
+{% if ad.textad %}
+    <div class="ad_text">
+        <p><a target="_blank" href="{{ ad.get_absolute_url }}">{{ ad.textad.content }}</a></p>
+    </div>
+{% endif %}
+
+{% if ad.customad %}
+    {{ ad.customad.content|safe }}
+{% endif %}
+
+{% if ad.bannerad %}
+    <div class="ad_banner">
+        <a target="_blank" href="{{ ad.get_absolute_url }}"><img src="{{ ad.bannerad.content.url }}" alt="{{ ad.title }}" /></a>
+    </div>
+{% endif %}

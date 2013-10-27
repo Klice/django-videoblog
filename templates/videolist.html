@@ -1,8 +1,7 @@
 {% extends "base.html" %} 
 {% load i18n %}
-
 {% load tagging_tags %}
-
+{% load adzone_tags %}
 {% block title %}
 {% if tag %}{{tag}} | Peegirl.info{%else%}{{ block.super }}{%endif%}
 {% endblock %} 
@@ -45,9 +44,7 @@
 {% if forloop.counter == r %}
 <li class="videoitem">
 	<div class="notitle">&nbsp;</div>
-
-<script id="runet42f8c2aa6699b0a32af74d27b95a5b17" type="text/javascript">(function(d, s, id, uid) {function dLoad() {var js, rjs = d.getElementById(uid);if (d.getElementById(id)) id=id+Math.random();var dv = d.createElement("div");dv.id = "42f8c2aa6699b0a32af74d27b95a5b17";rjs.parentNode.insertBefore(dv , rjs);js = d.createElement(s); js.id = id;js.src = "//tools.runetki.com/din.php?src=42f8c2aa6699b0a32af74d27b95a5b17&bg=none&w=500&h=300";rjs.parentNode.insertBefore(js, rjs);}if (window.addEventListener) {window.addEventListener("load", dLoad, false);} else if (window.attachEvent) {window.attachEvent("onload",dLoad);}}(document, "script", "rundin","runet42f8c2aa6699b0a32af74d27b95a5b17"));</script>
-
+{% random_zone_ad 'main' %}
 </li>
 {%endif%}
 {% endfor %} 

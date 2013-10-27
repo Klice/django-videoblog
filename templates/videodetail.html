@@ -1,5 +1,7 @@
 {% extends "base.html" %} 
 {% load i18n %}
+{% load adzone_tags %}
+
 {% block title %}{{ video.name }} | Peegirl.info{% endblock %}
 {% block keywords %}{{ video.name }}{% endblock %}
 {% block description %}{{video.desc}}{% endblock %}
@@ -13,11 +15,14 @@
 
 {% load tagging_tags %}
 {% load tags %}
+{% load cache %}
+
 <meta itemprop="name" content="{{ video.name }}"/>
 <div itemscope itemtype="http://schema.org/VideoObject">
 
 {% showvideo video %}
-{% tags_for_object video as tags %}
+
+{% cache cache_time video_rating video.pk %}
 <div class="rating_box rating_box_detail" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
 	<div class="rating {% if video.rating < 0 %} rating_red {%else%} rating_green {%endif%}" itemprop="ratingValue">{{ video.rating }}</div>
 	<p class="vote_buttons">
@@ -52,14 +57,21 @@
 			})
 		})()
 	</script>
+{% endcache %}
 
+{% cache cache_time video_tags video.pk %}
+{% tags_for_object video as tags %}
 <ul class="tags_list">
     {% for tag in tags %}
         <li class="tag"><a href="{% url "tag_list" tag=tag.name %}">{{tag.name}}</a></li>
     {% endfor %}
 </ul>
+{% endcache %}
+
 <a style="font-size: 18px;" href="{% url "random"%}">{% trans "Random Video" %} &rarr;</a>
+{% cache cache_time video_desc video.pk %}
 <p itemprop="description" id="video_decription" class="video_decription">{{video.desc}}</p>	
+{% endcache %}
 
 <!-- AddThis Button BEGIN -->
 <div class="addthis_toolbox addthis_default_style addthis_32x32_style" style="overflow: hidden;">
@@ -94,6 +106,7 @@
 					text.focus();
 					text.mouse_is_inside = false;
 					text.hover(function(){text.mouse_is_inside=true;}, function(){text.mouse_is_inside=false; });
+
 					$("body").on('click', function () {
 						if (text.mouse_is_inside!=true) {
 							e.preventDefault();
@@ -115,20 +128,23 @@
 {% endif %}
 <br><br>
 </div>
+
+{% cache cache_time video_rel video.pk %}
 <h2>{%trans "related_video"%}</h2>
 {% showrel video 6 %}
+{% endcache %}
+
 <br><br>
 <div class="parnter_a">
 <h2>Реклама наших партнеров</h2>
 <br>
-<script id="runeteaf3a4efcf65a1550c9dc9ab98565dbe" type="text/javascript">(function(d, s, id, uid) {function dLoad() {var js, rjs = d.getElementById(uid);if (d.getElementById(id)) id=id+Math.random();var dv = d.createElement("div");dv.id = "eaf3a4efcf65a1550c9dc9ab98565dbe";rjs.parentNode.insertBefore(dv , rjs);js = d.createElement(s); js.id = id;js.src = "//tools.runetki.com/din.php?src=eaf3a4efcf65a1550c9dc9ab98565dbe&bg=none&w=500&h=350";rjs.parentNode.insertBefore(js, rjs);}if (window.addEventListener) {window.addEventListener("load", dLoad, false);} else if (window.attachEvent) {window.attachEvent("onload",dLoad);}}(document, "script", "rundin","runeteaf3a4efcf65a1550c9dc9ab98565dbe"));</script>
+{% random_zone_ad 'detail_1' %}
 </div>
 <br><br>
 
 <script>
 $.get("{% url "video_count" video_id=video.pk %}");
 </script>
-
-<h2>Лучшие фетиш сайты рунета: <a href="http://www.fetishlinks.ru/cgi-bin/rankem.cgi?id=klice">www.fetishlinks.ru</a></h2>
+{% random_zone_ad 'detail_2' %}
 
 {% endblock %} 
