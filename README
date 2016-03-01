@@ -1,14 +1,5 @@
 This is Django App for creating adult video blog on your site.
 Currently is very early ALPHA version, so pay respect to this.
 
-Main idea behind this is to create video blog without hosting video files on server but stream this videos directly from well known adult hosting sites instead.
-So for adding video to your blog you need just the URL to video page on video hosting, currently its supports:
- - xhamster.com
- - tube8.com
- - empflix.com
- - vk.com (for now your need to registrate app on vk.com and modify models.py to set appropriate setting)
- - xvideo.com
- 
-In TODO list at first place is to add support for pornhub.com add to repo UserScripts for adding video to blog directly from sites.
- 
+Main idea behind this is to create video blog without hosting video files on server but stream this videos directly from well known hosting sites.
  
