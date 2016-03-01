@@ -1,4 +1,4 @@
-This is Django App for creating adult video blog on your site.
+This is Django App for creating video blog on your site.
 Currently is very early ALPHA version, so pay respect to this.
 
 Main idea behind this is to create video blog without hosting video files on server but stream this videos directly from well known hosting sites.
